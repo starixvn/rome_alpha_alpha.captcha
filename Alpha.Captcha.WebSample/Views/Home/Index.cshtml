@@ -1,0 +1,43 @@
+﻿@using Alpha.Captcha.Mvc
+@model Alpha.Captcha.WebSample.Models.Feedback
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>Feedback</legend>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Title)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Comment)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Comment, 5, 40, null)
+            @Html.ValidationMessageFor(model => model.Comment)
+        </div>
+        <br />
+        @Html.Captcha()
+        <br />
+        @if ((Request.HttpMethod == "POST") && ViewData.ModelState.IsValid)
+        {
+            <p class="success">Correct!</p>
+        }
+        <p class="error">
+            @Html.ValidationSummary()
+        </p>
+        <p>
+            <input type="submit" value="Send" />
+        </p>
+    </fieldset>
+}
+@section scripts {
+    <script src="~/Scripts/jquery.captcha.js"></script>
+}
