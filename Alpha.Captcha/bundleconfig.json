@@ -1,14 +1,14 @@
 [
   {
-    "outputFileName": "Resources/jquery.captcha.min.js",
+    "outputFileName": "Resources/captcha.min.js",
     "inputFiles": [
-      "Resources/jquery.captcha.js"
+      "Resources/captcha.js"
     ]
   },
   {
-    "outputFileName": "../Alpha.Captcha.WebSample/Scripts/jquery.captcha.js",
+    "outputFileName": "..\\Alpha.Captcha.WebSample\\Scripts\\captcha.js",
     "inputFiles": [
-      "Resources/jquery.captcha.js"
+      "Resources/captcha.js"
     ],
     "minify": {
       "enabled": false

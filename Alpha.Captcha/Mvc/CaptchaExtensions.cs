@@ -17,7 +17,7 @@
             var container = new TagBuilder("div");
             container.MergeAttribute("class", "captcha-container");
             html.Append(container.ToString(TagRenderMode.StartTag));
-            html.Append(CreateInstruction(helper));
+            //html.Append(CreateInstruction(helper));
             html.Append(CreateCaptchaImage(helper));
             html.Append(CreateCaptchaInput(helper, inputName));
             html.Append(container.ToString(TagRenderMode.EndTag));
@@ -45,7 +45,7 @@
             var html = new StringBuilder();
             var row = CreateRowTag(helper, "row-image");
 
-            var imageUrl = CreateActionUrl(helper, "Image");
+            var imageUrl = CreateActionUrl(helper, "Image", false);
             var imageBuilder = new TagBuilder("img");
             imageBuilder.MergeAttribute("class", "captcha-image");
             imageBuilder.MergeAttribute("src", imageUrl);
@@ -88,10 +88,11 @@
             return rowBuilder;
         }
 
-        private static string CreateActionUrl(HtmlHelper helper, string action)
+        private static string CreateActionUrl(HtmlHelper helper, string action, bool includeVersion = true)
         {
             var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
-            return $"{urlHelper.Action(action, "Captcha")}?v={AssemblyHelpers.Version}";
+            var url = urlHelper.Action(action, "Captcha");
+            return includeVersion ? $"{url}?v={AssemblyHelpers.Version}" : url;
         }
     }
 }

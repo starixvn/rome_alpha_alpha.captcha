@@ -18,15 +18,15 @@
         {
         }
 
-        public CaptchaController(CaptchaOptions captchaOptions)
+        private CaptchaController(CaptchaOptions captchaOptions)
             : this(new CaptchaServiceImp(captchaOptions))
         {
         }
 
-        public CaptchaController(CaptchaService captchaService)
+        private CaptchaController(CaptchaService captchaService)
         {
             this.captchaService = captchaService;
-            scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.jquery.captcha.min.js");
+            scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
         }
 
         [HttpGet]
