@@ -1,10 +1,10 @@
 ﻿$(() => {
-    const captchaImagePlacehoder = $('.captcha-image');
-    const captchaRefreshIcon = $('.captcha-input a');
-    const captchaInput = $('.captcha-input input');
+    const captchaImageRow = $('.row-image');
+    const captchaRefreshIcon = $('.refresh-icon');
+    const captchaInput = $('.captcha-input');
 
     const registerImageEvent = () => {
-        const captchaImage = captchaImagePlacehoder.find('img');
+        const captchaImage = $('.captcha-image');
         captchaImage.load(() => {
             captchaInput.focus();
         });
@@ -12,9 +12,9 @@
 
     const freshCaptcha = () => {
         captchaInput.val('');
-        const captchaImageHtml = captchaImagePlacehoder.html();
-        captchaImagePlacehoder.html('');
-        captchaImagePlacehoder.append(captchaImageHtml);
+        const newCaptchaImage = $('<div>').append($('.captcha-image').clone()).html();
+        $('.captcha-image').remove();
+        captchaImageRow.prepend(newCaptchaImage);
         registerImageEvent();
     }
 

@@ -17,8 +17,8 @@
             var container = new TagBuilder("div");
             container.MergeAttribute("class", "captcha-container");
             html.Append(container.ToString(TagRenderMode.StartTag));
-            html.Append(CreateCaptchaImage(helper));
             html.Append(CreateInstruction(helper));
+            html.Append(CreateCaptchaImage(helper));
             html.Append(CreateCaptchaInput(helper, inputName));
             html.Append(container.ToString(TagRenderMode.EndTag));
             html.Append(CreateCaptchaScript(helper));
@@ -27,36 +27,71 @@
 
         private static string CreateCaptchaInput(HtmlHelper helper, string inputName)
         {
+            var html = new StringBuilder();
+            var row = CreateRowTag(helper, "row-input");
+
             var inputBuilder = new TagBuilder("input");
+            inputBuilder.MergeAttribute("class", "captcha-input");
             inputBuilder.MergeAttribute("name", inputName);
-            return $"<div class='captcha-input'>{inputBuilder.ToString(TagRenderMode.SelfClosing)}<a href='#'>{Configuration.CaptchaRefresh}</a></div>";
+            inputBuilder.MergeAttribute("placeholder", Configuration.CaptchaInputPlaceholder);
+            html.Append(row.ToString(TagRenderMode.StartTag));
+            html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
+            html.Append(row.ToString(TagRenderMode.EndTag));
+            return html.ToString();
         }
 
         private static string CreateCaptchaImage(HtmlHelper helper)
         {
-            var imagePlaceholder = new TagBuilder("div");
-            imagePlaceholder.MergeAttribute("class", "captcha-image");
-            imagePlaceholder.MergeAttribute("style", "width: 200px; height: 50px");
-            var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
-            string url = urlHelper.Action("Image", "Captcha");
-            var imgBuilder = new TagBuilder("img");
-            imgBuilder.MergeAttribute("src", url);
-            return $"{imagePlaceholder.ToString(TagRenderMode.StartTag)}{imgBuilder.ToString(TagRenderMode.SelfClosing)}{imagePlaceholder.ToString(TagRenderMode.EndTag)}";
+            var html = new StringBuilder();
+            var row = CreateRowTag(helper, "row-image");
+
+            var imageUrl = CreateActionUrl(helper, "Image");
+            var imageBuilder = new TagBuilder("img");
+            imageBuilder.MergeAttribute("class", "captcha-image");
+            imageBuilder.MergeAttribute("src", imageUrl);
+
+            var refreshIconUrl = CreateActionUrl(helper, "RefreshIcon");
+            var refreshIconBuilder = new TagBuilder("img");
+            refreshIconBuilder.MergeAttribute("class", "refresh-icon");
+            refreshIconBuilder.MergeAttribute("src", refreshIconUrl);
+
+            html.Append(row.ToString(TagRenderMode.StartTag));
+            html.Append(imageBuilder.ToString(TagRenderMode.SelfClosing));
+            html.Append(refreshIconBuilder.ToString(TagRenderMode.SelfClosing));
+            html.Append(row.ToString(TagRenderMode.EndTag));
+            return html.ToString();
         }
 
         private static string CreateInstruction(HtmlHelper helper)
         {
-            return $"<div>{Configuration.CaptchaInstruction}</div>";
+            var html = new StringBuilder();
+            var row = CreateRowTag(helper, "row-instruction");
+            html.Append(row.ToString(TagRenderMode.StartTag));
+            html.Append($"<div class='captcha-instruction'>{Configuration.CaptchaInstruction}</div>");
+            html.Append(row.ToString(TagRenderMode.EndTag));
+            return html.ToString();
         }
 
         private static string CreateCaptchaScript(HtmlHelper helper)
         {
-            var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
-            string url = $"{urlHelper.Action("Script", "Captcha")}?v={AssemblyHelpers.Version}";
+            var url = CreateActionUrl(helper, "Script");
             var scriptBuilder = new TagBuilder("script");
             scriptBuilder.MergeAttribute("src", url);
             scriptBuilder.MergeAttribute("type", "text/javascript");
             return $"{scriptBuilder.ToString(TagRenderMode.StartTag)}{scriptBuilder.ToString(TagRenderMode.EndTag)}";
+        }
+
+        private static TagBuilder CreateRowTag(HtmlHelper helper, string customClass)
+        {
+            var rowBuilder = new TagBuilder("div");
+            rowBuilder.MergeAttribute("class", $"captcha-row {customClass}");
+            return rowBuilder;
+        }
+
+        private static string CreateActionUrl(HtmlHelper helper, string action)
+        {
+            var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
+            return $"{urlHelper.Action(action, "Captcha")}?v={AssemblyHelpers.Version}";
         }
     }
 }

@@ -26,7 +26,7 @@
         public CaptchaController(CaptchaService captchaService)
         {
             this.captchaService = captchaService;
-            scriptResource = ResourceHelpers.LoadEmbeddedResource("Alpha.Captcha.Resources.jquery.captcha.min.js");
+            scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.jquery.captcha.min.js");
         }
 
         [HttpGet]
@@ -38,6 +38,18 @@
             Response.Cache.SetNoServerCaching();
             Response.Cache.SetNoStore();
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
+        }
+
+        [OutputCache(Duration = int.MaxValue)]
+        public ActionResult RefreshIcon()
+        {
+            return File(ResourceHelpers.ReadStream("Alpha.Captcha.Resources.refresh-icon.svg"), "image/svg+xml; charset=utf-8");
+        }
+
+        [OutputCache(Duration = int.MaxValue)]
+        public ActionResult StyleSheet()
+        {
+            return Content(ResourceHelpers.ReadString("Alpha.Captcha.Resources.jquery.captcha.css"), "text/css");
         }
 
         [HttpGet]

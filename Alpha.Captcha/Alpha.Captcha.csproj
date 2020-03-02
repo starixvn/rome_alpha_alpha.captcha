@@ -104,10 +104,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\jquery.captcha.css" />
+    <Content Include="..\Alpha.Captcha.WebSample\Scripts\jquery.captcha.js" />
     <Content Include="Resources\jquery.captcha.js" />
     <EmbeddedResource Include="Resources\jquery.captcha.min.js">
       <DependentUpon>jquery.captcha.js</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\refresh-icon.svg" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

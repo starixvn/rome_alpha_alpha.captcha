@@ -1,18 +1,18 @@
 $(function () {
-    var captchaImagePlacehoder = $('.captcha-image');
-    var captchaRefreshIcon = $('.captcha-input a');
-    var captchaInput = $('.captcha-input input');
+    var captchaImageRow = $('.row-image');
+    var captchaRefreshIcon = $('.refresh-icon');
+    var captchaInput = $('.captcha-input');
     var registerImageEvent = function () {
-        var captchaImage = captchaImagePlacehoder.find('img');
+        var captchaImage = $('.captcha-image');
         captchaImage.load(function () {
             captchaInput.focus();
         });
     };
     var freshCaptcha = function () {
         captchaInput.val('');
-        var captchaImageHtml = captchaImagePlacehoder.html();
-        captchaImagePlacehoder.html('');
-        captchaImagePlacehoder.append(captchaImageHtml);
+        var newCaptchaImage = $('<div>').append($('.captcha-image').clone()).html();
+        $('.captcha-image').remove();
+        captchaImageRow.prepend(newCaptchaImage);
         registerImageEvent();
     };
     captchaRefreshIcon.click(freshCaptcha);

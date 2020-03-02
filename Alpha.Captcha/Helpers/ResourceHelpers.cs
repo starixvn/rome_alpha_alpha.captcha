@@ -1,16 +1,22 @@
 ﻿namespace Alpha.Captcha.Helpers
 {
+    using System.Drawing;
     using System.IO;
 
     public static class ResourceHelpers
     {
-        public static string LoadEmbeddedResource(string resourcePath)
+        public static string ReadString(string resourcePath)
         {
-            using (var stream = AssemblyHelpers.Current.GetManifestResourceStream(resourcePath))
+            using (var stream = ReadStream(resourcePath))
             using (var reader = new StreamReader(stream))
             {
                 return reader.ReadToEnd();
             }
+        }
+
+        public static Stream ReadStream(string resourcePath)
+        {
+            return AssemblyHelpers.Current.GetManifestResourceStream(resourcePath);
         }
     }
 }

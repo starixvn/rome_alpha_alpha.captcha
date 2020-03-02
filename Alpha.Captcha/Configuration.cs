@@ -4,8 +4,8 @@
     {
         public static string CaptchaSessionKey = "Alpha.Captcha";
         public static string CaptchaInputName = "Captcha";
-        public static string CaptchaInstruction = "Please type the letters above";
-        public static string CaptchaRefresh = "R";
+        public static string CaptchaInputPlaceholder = "Please retype the code above";
+        public static string CaptchaInstruction = "I'm not a robot";
         public static string CaptchaValidationErrorMessage = "Invalid captcha";
     }
 }
