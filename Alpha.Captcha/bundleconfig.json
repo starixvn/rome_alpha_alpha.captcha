@@ -12,6 +12,7 @@
     ],
     "minify": {
       "enabled": false
-    }
+    },
+    "includeInProject":  false
   }
 ]

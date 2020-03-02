@@ -17,4 +17,3 @@ $(function () {
     };
     captchaRefreshIcon.click(freshCaptcha);
 });
-//# sourceMappingURL=jquery.captcha.js.map

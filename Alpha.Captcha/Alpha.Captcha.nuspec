@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+  <metadata>
+    <id>Alpha.Captcha</id>
+    <version>0.0.3</version>
+    <title>Alpha.Captcha</title>
+    <authors>Leo</authors>
+    <owners>Nexdev</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <projectUrl>https://gitlab.nexdev.net/rome/alpha/alpha.captcha</projectUrl>
+    <description>.NET web captcha component</description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright 2020</copyright>
+  </metadata>
+  <files />
+</package>

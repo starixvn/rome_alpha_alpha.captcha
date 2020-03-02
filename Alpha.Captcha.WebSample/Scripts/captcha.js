@@ -13,4 +13,3 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     captchaRefreshIcon.addEventListener('click', refreshCaptcha);
 });
-//# sourceMappingURL=captcha.js.map
