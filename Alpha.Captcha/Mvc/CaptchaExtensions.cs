@@ -1,17 +1,30 @@
 ﻿namespace Alpha.Captcha.Mvc
 {
     using Alpha.Captcha.Helpers;
+    using Alpha.Captcha.Models;
     using System.Text;
     using System.Web.Mvc;
 
     public static class CaptchaExtensions
     {
-        public static MvcHtmlString Captcha(this HtmlHelper helper)
+        public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaLevels level)
         {
-            return Captcha(helper, Configuration.CaptchaInputName);
+            return Captcha(helper, level, Configuration.CaptchaInputName);
         }
 
-        public static MvcHtmlString Captcha(this HtmlHelper helper, string inputName)
+        public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaLevels level, string inputName)
+        {
+            CreateCaptchaSession(helper, level);
+            return MvcHtmlString.Create(CreateCaptchaHtml(helper, inputName));
+        }
+
+        private static void CreateCaptchaSession(this HtmlHelper helper, CaptchaLevels level)
+        {
+            var session = helper.ViewContext.HttpContext.Session;
+            session[Configuration.CaptchaSessionLevel] = level;
+        }
+
+        private static string CreateCaptchaHtml(this HtmlHelper helper, string inputName)
         {
             var html = new StringBuilder();
             var container = new TagBuilder("div");
@@ -22,7 +35,7 @@
             html.Append(CreateCaptchaInput(helper, inputName));
             html.Append(container.ToString(TagRenderMode.EndTag));
             html.Append(CreateCaptchaScript(helper));
-            return MvcHtmlString.Create(html.ToString());
+            return html.ToString();
         }
 
         private static string CreateCaptchaInput(HtmlHelper helper, string inputName)

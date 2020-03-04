@@ -13,10 +13,9 @@ namespace Alpha.Captcha.WinSample
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void GenerateClick(object sender, EventArgs e)
         {
-            var captchaOptions = new CaptchaOptions();
-            var captchaService = new CaptchaServiceImp(captchaOptions);
+            var captchaService = new CaptchaService();
             var bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {
@@ -24,7 +23,7 @@ namespace Alpha.Captcha.WinSample
                 {
                     for (var j = 0; j < 4; j++)
                     {
-                        var captchaResult = captchaService.Generate();
+                        var captchaResult = captchaService.Generate(CaptchaLevels.Medium);
                         var captchaImage = captchaResult.Image;
                         var x = i * (captchaImage.Width + 5);
                         var y = j * (captchaImage.Height + 5);

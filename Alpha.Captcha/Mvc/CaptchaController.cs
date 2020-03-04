@@ -11,19 +11,14 @@
     public class CaptchaController : Controller
     {
         private static string scriptResource;
-        private readonly CaptchaService captchaService;
+        private readonly ICaptchaService captchaService;
 
         public CaptchaController()
-            : this(new CaptchaOptions())
+            : this(new CaptchaService())
         {
         }
 
-        private CaptchaController(CaptchaOptions captchaOptions)
-            : this(new CaptchaServiceImp(captchaOptions))
-        {
-        }
-
-        private CaptchaController(CaptchaService captchaService)
+        private CaptchaController(ICaptchaService captchaService)
         {
             this.captchaService = captchaService;
             scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
@@ -32,7 +27,9 @@
         [HttpGet]
         public void Image()
         {
-            var captchaResult = captchaService.Generate();
+            var captchaLevelObject = Session[Configuration.CaptchaSessionLevel];
+            var captchaLevel = captchaLevelObject == null ? CaptchaLevels.Extreme : (CaptchaLevels)captchaLevelObject;
+            var captchaResult = captchaService.Generate(captchaLevel);
             WriteToSession(HttpContext.Session, captchaResult.Text);
             WriteToResponse(Response, captchaResult.Image);
             Response.Cache.SetNoServerCaching();
@@ -68,7 +65,7 @@
 
         private void WriteToSession(HttpSessionStateBase session, string text)
         {
-            Session[Configuration.CaptchaSessionKey] = text;
+            Session[Configuration.CaptchaSessionValue] = text;
         }
 
         private void WriteToResponse(HttpResponseBase response, Image image)

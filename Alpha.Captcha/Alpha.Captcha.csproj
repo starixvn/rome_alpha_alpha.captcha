@@ -115,6 +115,8 @@
     <Compile Include="Configuration.cs" />
     <Compile Include="Helpers\AssemblyHelpers.cs" />
     <Compile Include="Helpers\ResourceHelpers.cs" />
+    <Compile Include="Models\CaptchaLevels.cs" />
+    <Compile Include="Models\CaptchaProfiles.cs" />
     <Compile Include="Mvc\CaptchaExtensions.cs" />
     <Compile Include="Mvc\CaptchaController.cs" />
     <Compile Include="Helpers\RandomProvider.cs" />

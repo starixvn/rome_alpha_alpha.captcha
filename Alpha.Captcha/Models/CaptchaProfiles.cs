@@ -1,0 +1,91 @@
+﻿namespace Alpha.Captcha.Models
+{
+    using System.Drawing;
+
+    public class CaptchaProfiles
+    {
+        private static readonly int DefaultWidth = 200;
+        private static readonly int DefaultHeight = 50;
+        private static readonly int DefaultTextLength = 6;
+        private static readonly Color DefaultBackColor = Color.White;
+        private static readonly Color DefaultFontColor = Color.Black;
+        private static readonly Color DefaultNoiseColor = Color.Black;
+        private static readonly Color DefaultLineColor = Color.Black;
+        private static readonly string DefaultChars = "ACDEFGHJKLNPQRTUVXYZ2346789";
+        private static readonly string[] DefaultFonts = new [] {
+            "arial",
+            "arial black",
+            "comic sans ms",
+            "courier new",
+            "estrangelo edessa",
+            "franklin gothic medium",
+            "georgia",
+            "lucida console",
+            "lucida sans unicode",
+            "mangal",
+            "microsoft sans serif",
+            "palatino linotype",
+            "sylfaen",
+            "tahoma",
+            "times new roman",
+            "trebuchet ms",
+            "verdana"
+        };
+
+        public static CaptchaOptions Low = new CaptchaOptions(
+            DefaultWidth,
+            DefaultHeight,
+            6,
+            DefaultBackColor,
+            DefaultFontColor,
+            DefaultNoiseColor,
+            DefaultLineColor,
+            FontWarpFactor.Low,
+            BackgroundNoiseLevel.Low,
+            LineNoiseLevel.Low,
+            DefaultChars,
+            DefaultFonts);
+
+        public static CaptchaOptions Medium = new CaptchaOptions(
+            DefaultWidth,
+            DefaultHeight,
+            6,
+            DefaultBackColor,
+            DefaultFontColor,
+            DefaultNoiseColor,
+            DefaultLineColor,
+            FontWarpFactor.Medium,
+            BackgroundNoiseLevel.Medium,
+            LineNoiseLevel.Medium,
+            DefaultChars,
+            DefaultFonts);
+
+        public static CaptchaOptions High = new CaptchaOptions(
+            DefaultWidth,
+            DefaultHeight,
+            6,
+            DefaultBackColor,
+            DefaultFontColor,
+            DefaultNoiseColor,
+            DefaultLineColor,
+            FontWarpFactor.High,
+            BackgroundNoiseLevel.High,
+            LineNoiseLevel.High,
+            DefaultChars,
+            DefaultFonts);
+
+        public static CaptchaOptions Extreme = new CaptchaOptions(
+            DefaultWidth,
+            DefaultHeight,
+            6,
+            DefaultBackColor,
+            DefaultFontColor,
+            DefaultNoiseColor,
+            DefaultLineColor,
+            FontWarpFactor.Extreme,
+            BackgroundNoiseLevel.Extreme,
+            LineNoiseLevel.Extreme,
+            DefaultChars,
+            DefaultFonts);
+    }
+}

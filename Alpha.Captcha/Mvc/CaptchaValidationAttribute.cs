@@ -35,7 +35,7 @@
             }
             else
             {
-                var sessionCaptcha = filterContext.HttpContext.Session[Configuration.CaptchaSessionKey];
+                var sessionCaptcha = filterContext.HttpContext.Session[Configuration.CaptchaSessionValue];
                 if (sessionCaptcha != null && inputCaptcha.Equals(sessionCaptcha.ToString(), StringComparison.OrdinalIgnoreCase))
                 {
                     CaptchaValidationPassed(filterContext);

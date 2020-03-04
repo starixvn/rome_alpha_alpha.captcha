@@ -8,30 +8,53 @@
     using System.Drawing.Imaging;
     using System.Text;
 
-    public interface CaptchaService
+    public interface ICaptchaService
     {
-        CaptchaResult Generate();
+        CaptchaResult Generate(CaptchaOptions captchaOptions);
+
+        CaptchaResult Generate(CaptchaLevels captchaLevel);
     }
 
-    public class CaptchaServiceImp : CaptchaService
+    public class CaptchaService : ICaptchaService
     {
         private readonly Random random;
-        private readonly CaptchaOptions captchaOptions;
 
-        public CaptchaServiceImp(CaptchaOptions captchaOptions)
-            : this(RandomProvider.GetThreadRandom(), captchaOptions)
+        public CaptchaService()
+            : this(RandomProvider.GetThreadRandom())
         {
         }
 
-        public CaptchaServiceImp(Random random, CaptchaOptions captchaOptions)
+        public CaptchaService(Random random)
         {
             this.random = random;
-            this.captchaOptions = captchaOptions;
         }
 
-        public CaptchaResult Generate()
+        private static CaptchaOptions GetCaptchaOptions(CaptchaLevels level)
         {
-            var captchaText = RandomText();
+            switch (level)
+            {
+                case CaptchaLevels.Low:
+                    return CaptchaProfiles.Low;
+                case CaptchaLevels.Medium:
+                    return CaptchaProfiles.Medium;
+                case CaptchaLevels.High:
+                    return CaptchaProfiles.High;
+                case CaptchaLevels.Extreme:
+                    return CaptchaProfiles.Extreme;
+                default:
+                    throw new NotImplementedException(nameof(level));
+            }
+        }
+
+        public CaptchaResult Generate(CaptchaLevels level)
+        {
+            var captchaOptions = GetCaptchaOptions(level);
+            return Generate(captchaOptions);
+        }
+
+        public CaptchaResult Generate(CaptchaOptions captchaOptions)
+        {
+            var captchaText = RandomText(captchaOptions);
             var captchaImage = new Bitmap(captchaOptions.Width, captchaOptions.Height, PixelFormat.Format24bppRgb);
             using (var gr = Graphics.FromImage(captchaImage))
             {
@@ -48,32 +71,32 @@
                 {
                     foreach (var c in captchaText)
                     {
-                        using (var fnt = GetFont())
+                        using (var fnt = GetFont(captchaOptions))
                         {
                             var rectChar = new Rectangle(Convert.ToInt32(charOffset * charWidth), 0, Convert.ToInt32(charWidth), captchaOptions.Height);
-                            using (var gp = TextPath(c.ToString(), fnt, rectChar))
+                            using (var graphics = TextPath(c.ToString(), fnt, rectChar))
                             {
-                                WarpText(gp, rectChar);
-                                gr.FillPath(br, gp);
+                                WarpText(captchaOptions, graphics, rectChar);
+                                gr.FillPath(br, graphics);
                             }
                         }
                         charOffset += 1;
                     }
                 }
 
-                AddNoise(gr, rect);
-                AddLine(gr, rect);
+                AddNoise(captchaOptions, gr, rect);
+                AddLine(captchaOptions, gr, rect);
             }
 
             return new CaptchaResult(captchaText, captchaImage);
         }
 
-        private string RandomFontFamily()
+        private string RandomFontFamily(CaptchaOptions captchaOptions)
         {
             return captchaOptions.Fonts[random.Next(0, captchaOptions.Fonts.Length)];
         }
 
-        private string RandomText()
+        private string RandomText(CaptchaOptions captchaOptions)
         {
             var sb = new StringBuilder(captchaOptions.TextLength);
             var maxLength = captchaOptions.Chars.Length;
@@ -108,7 +131,7 @@
             return gp;
         }
 
-        private Font GetFont()
+        private Font GetFont(CaptchaOptions captchaOptions)
         {
             var density = 0f;
             switch (captchaOptions.FontWarp)
@@ -130,12 +153,12 @@
                     break;
             }
 
-            var fname = RandomFontFamily();
+            var fname = RandomFontFamily(captchaOptions);
             var fsize = Convert.ToInt32(captchaOptions.Height * density);
             return new Font(fname, fsize, FontStyle.Bold);
         }
 
-        private void WarpText(GraphicsPath textPath, Rectangle rect)
+        private void WarpText(CaptchaOptions captchaOptions, GraphicsPath textPath, Rectangle rect)
         {
             float WarpDivisor = 1.0f;
             float RangeModifier = 1.0f;
@@ -178,7 +201,7 @@
             textPath.Warp(points, rectF, m, WarpMode.Perspective, 0);
         }
 
-        private void AddNoise(Graphics graphics, Rectangle rect)
+        private void AddNoise(CaptchaOptions captchaOptions, Graphics graphics, Rectangle rect)
         {
             int density = 0;
             int size = 0;
@@ -214,7 +237,7 @@
             }
         }
 
-        private void AddLine(Graphics graphics, Rectangle rect)
+        private void AddLine(CaptchaOptions captchaOptions, Graphics graphics, Rectangle rect)
         {
             int length = 0;
             float width = 1.0f;

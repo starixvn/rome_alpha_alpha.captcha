@@ -16,6 +16,19 @@
 
         .captcha-input {
             width: 220px;
+            text-transform: uppercase;
+        }
+
+        .captcha-input::-webkit-input-placeholder { /* Edge */
+            text-transform:none;
+        }
+
+        .captcha-input:-ms-input-placeholder { /* Internet Explorer */
+            text-transform: none;
+        }
+
+        .captcha-input::placeholder {
+            text-transform: none;
         }
 
         .refresh-icon {

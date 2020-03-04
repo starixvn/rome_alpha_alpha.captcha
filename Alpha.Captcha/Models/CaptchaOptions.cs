@@ -4,28 +4,57 @@
 
     public class CaptchaOptions
     {
-        public int Width { get; } = 200;
+        public CaptchaOptions(
+            int width,
+            int height,
+            int textLength,
+            Color backColor,
+            Color fontColor,
+            Color noiseColor,
+            Color lineColor,
+            FontWarpFactor fontWarp,
+            BackgroundNoiseLevel backgroundNoise,
+            LineNoiseLevel lineNoise,
+            string chars,
+            string[] fonts
+            )
+        {
+            Width = width;
+            Height = height;
+            TextLength = textLength;
+            BackColor = backColor;
+            FontColor = fontColor;
+            NoiseColor = noiseColor;
+            LineColor = lineColor;
+            FontWarp = fontWarp;
+            BackgroundNoise = backgroundNoise;
+            LineNoise = lineNoise;
+            Chars = chars;
+            Fonts = fonts;
+        }
 
-        public int Height { get; } = 50;
+        public int Width { get; }
 
-        public Color BackColor { get; } = Color.White;
+        public int Height { get; }
 
-        public Color FontColor { get; } = Color.Black;
+        public int TextLength { get; }
 
-        public Color NoiseColor { get; } = Color.Black;
+        public Color BackColor { get; }
 
-        public Color LineColor { get; } = Color.Black;
+        public Color FontColor { get; }
 
-        public int TextLength { get; } = 6;
+        public Color NoiseColor { get; }
 
-        public FontWarpFactor FontWarp { get; } = FontWarpFactor.Medium;
+        public Color LineColor { get; }
 
-        public BackgroundNoiseLevel BackgroundNoise { get; } = BackgroundNoiseLevel.Medium;
+        public FontWarpFactor FontWarp { get; }
 
-        public LineNoiseLevel LineNoise { get; } = LineNoiseLevel.Medium;
+        public BackgroundNoiseLevel BackgroundNoise { get; }
 
-        public string Chars { get; } = "ACDEFGHJKLNPQRTUVXYZ2346789";
+        public LineNoiseLevel LineNoise { get; }
 
-        public string[] Fonts { get; } = new [] { "arial", "arial black", "comic sans ms", "courier new", "estrangelo edessa", "franklin gothic medium", "georgia", "lucida console", "lucida sans unicode", "mangal", "microsoft sans serif", "palatino linotype", "sylfaen", "tahoma", "times new roman", "trebuchet ms", "verdana" };
+        public string Chars { get; }
+
+        public string[] Fonts { get; }
     }
 }
