@@ -25,7 +25,7 @@
             @Html.ValidationMessageFor(model => model.Comment)
         </div>
         <br />
-        @Html.Captcha(CaptchaLevels.Extreme)
+        @Html.Captcha(CaptchaLevels.Low)
         <br />
         @if ((Request.HttpMethod == "POST") && ViewData.ModelState.IsValid)
         {
@@ -39,6 +39,9 @@
         </p>
     </fieldset>
 }
+@section styles {
+    <link href="~/Resources/captcha.css" rel="stylesheet" />
+}
 @section scripts {
-    <script src="~/Scripts/captcha.js"></script>
+    <script src="~/Resources/captcha.js"></script>
 }

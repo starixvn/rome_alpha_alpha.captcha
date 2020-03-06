@@ -2,6 +2,7 @@
 {
     using Alpha.Captcha.Helpers;
     using Alpha.Captcha.Models;
+    using Alpha.Captcha.Resources;
     using System.Text;
     using System.Web.Mvc;
 
@@ -46,7 +47,7 @@
             var inputBuilder = new TagBuilder("input");
             inputBuilder.MergeAttribute("class", "captcha-input");
             inputBuilder.MergeAttribute("name", inputName);
-            inputBuilder.MergeAttribute("placeholder", Configuration.CaptchaInputPlaceholder);
+            //inputBuilder.MergeAttribute("placeholder", Configuration.CaptchaInputPlaceholder);
             html.Append(row.ToString(TagRenderMode.StartTag));
             html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
             html.Append(row.ToString(TagRenderMode.EndTag));
@@ -80,7 +81,7 @@
             var html = new StringBuilder();
             var row = CreateRowTag(helper, "row-instruction");
             html.Append(row.ToString(TagRenderMode.StartTag));
-            html.Append($"<div class='captcha-instruction'>{Configuration.CaptchaInstruction}</div>");
+            html.Append($"<div class='captcha-instruction'>{Lang.IamNotARobot}</div>");
             html.Append(row.ToString(TagRenderMode.EndTag));
             return html.ToString();
         }

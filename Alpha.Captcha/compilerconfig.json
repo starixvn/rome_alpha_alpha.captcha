@@ -1,0 +1,14 @@
+﻿[
+  {
+    "outputFile": "Resources/captcha.css",
+    "inputFile": "Resources/captcha.scss"
+  },
+  {
+    "outputFile": "..\\Alpha.Captcha.WebSample\\Resources\\captcha.css",
+    "inputFile": "Resources/captcha.scss",
+    "minify": {
+      "enabled": false
+    },
+    "includeInProject": true
+  }
+]

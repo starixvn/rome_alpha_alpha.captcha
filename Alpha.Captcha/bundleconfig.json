@@ -6,7 +6,7 @@
     ]
   },
   {
-    "outputFileName": "..\\Alpha.Captcha.WebSample\\Scripts\\captcha.js",
+    "outputFileName": "..\\Alpha.Captcha.WebSample\\Resources\\captcha.js",
     "inputFiles": [
       "Resources/captcha.js"
     ],

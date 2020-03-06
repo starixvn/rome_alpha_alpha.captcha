@@ -127,12 +127,8 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <None Include="Scripts\jquery-1.11.3.intellisense.js" />
-    <None Include="Scripts\jquery-1.11.3-vsdoc.js" />
-    <Content Include="Scripts\captcha.js" />
-    <Content Include="Scripts\jquery-1.11.3.js" />
-    <Content Include="Scripts\jquery-1.11.3.min.js" />
-    <Content Include="Scripts\jquery.captcha.js" />
+    <Content Include="Resources\captcha.css" />
+    <Content Include="Resources\captcha.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -149,7 +145,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-1.11.3.min.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Captcha\Alpha.Captcha.csproj">

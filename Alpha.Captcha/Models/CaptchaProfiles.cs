@@ -4,7 +4,7 @@
 
     public class CaptchaProfiles
     {
-        private static readonly int DefaultWidth = 200;
+        private static readonly int DefaultWidth = 250;
         private static readonly int DefaultHeight = 50;
         private static readonly int DefaultTextLength = 6;
         private static readonly Color DefaultBackColor = Color.White;
@@ -35,7 +35,7 @@
         public static CaptchaOptions Low = new CaptchaOptions(
             DefaultWidth,
             DefaultHeight,
-            6,
+            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
@@ -49,7 +49,7 @@
         public static CaptchaOptions Medium = new CaptchaOptions(
             DefaultWidth,
             DefaultHeight,
-            6,
+            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
@@ -63,7 +63,7 @@
         public static CaptchaOptions High = new CaptchaOptions(
             DefaultWidth,
             DefaultHeight,
-            6,
+            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
@@ -77,7 +77,7 @@
         public static CaptchaOptions Extreme = new CaptchaOptions(
             DefaultWidth,
             DefaultHeight,
-            6,
+            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
