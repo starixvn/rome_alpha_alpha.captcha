@@ -29,7 +29,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -52,7 +52,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -100,42 +100,23 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\captcha.min.css">
-      <DependentUpon>captcha.css</DependentUpon>
-    </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <None Include="Resources\captcha.scss" />
-    <None Include="Resources\captcha.css">
-      <DependentUpon>captcha.scss</DependentUpon>
-    </None>
     <None Include="Resources\captcha.js" />
     <EmbeddedResource Include="Resources\captcha.min.js">
       <DependentUpon>captcha.js</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Lang.zh-CN.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Lang.zh-CN.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Lang.zh-TW.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Lang.zh-TW.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Lang.vi-VN.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Lang.vi-VN.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Lang.th-TH.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Lang.th-TH.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Lang.zh-CN.resx" />
+    <EmbeddedResource Include="Resources\Lang.zh-TW.resx" />
+    <EmbeddedResource Include="Resources\Lang.vi-VN.resx" />
+    <EmbeddedResource Include="Resources\Lang.th-TH.resx" />
     <EmbeddedResource Include="Resources\Lang.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Lang.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\refresh-icon.svg" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
@@ -143,6 +124,7 @@
     <Compile Include="Helpers\ResourceHelpers.cs" />
     <Compile Include="Models\CaptchaLevels.cs" />
     <Compile Include="Models\CaptchaProfiles.cs" />
+    <Compile Include="Models\CaptchaSetting.cs" />
     <Compile Include="Mvc\CaptchaExtensions.cs" />
     <Compile Include="Mvc\CaptchaController.cs" />
     <Compile Include="Helpers\RandomProvider.cs" />
@@ -164,6 +146,7 @@
     <Content Include="Alpha.Captcha.nuspec">
       <SubType>Designer</SubType>
     </Content>
+    <EmbeddedResource Include="Resources\captcha.min.css" />
     <None Include="bundleconfig.json" />
     <None Include="packages.config" />
   </ItemGroup>

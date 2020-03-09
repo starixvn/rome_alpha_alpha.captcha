@@ -1,0 +1,1 @@
+NuGet.exe pack Alpha.Captcha.csproj -Prop Configuration=Release

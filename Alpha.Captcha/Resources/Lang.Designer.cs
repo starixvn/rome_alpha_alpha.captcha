@@ -61,11 +61,38 @@ namespace Alpha.Captcha.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Submit.
+        /// </summary>
+        internal static string ButtonText {
+            get {
+                return ResourceManager.GetString("ButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I&apos;m not a robot.
         /// </summary>
         internal static string IamNotARobot {
             get {
                 return ResourceManager.GetString("IamNotARobot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the CAPTCHA code.
+        /// </summary>
+        internal static string RefreshTitle {
+            get {
+                return ResourceManager.GetString("RefreshTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You input an invalid code.
+        /// </summary>
+        internal static string ValidateErrorMessage {
+            get {
+                return ResourceManager.GetString("ValidateErrorMessage", resourceCulture);
             }
         }
     }

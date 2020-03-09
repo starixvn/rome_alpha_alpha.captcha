@@ -10,30 +10,41 @@
     {
         public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaLevels level)
         {
-            return Captcha(helper, level, Configuration.CaptchaInputName);
+            return Captcha(helper, new CaptchaSetting(level));
         }
 
-        public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaLevels level, string inputName)
+        public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaSetting setting)
         {
-            CreateCaptchaSession(helper, level);
-            return MvcHtmlString.Create(CreateCaptchaHtml(helper, inputName));
+            CreateCaptchaSession(helper, setting);
+            return MvcHtmlString.Create(CreateCaptchaHtml(helper, setting));
         }
 
-        private static void CreateCaptchaSession(this HtmlHelper helper, CaptchaLevels level)
+        private static void CreateCaptchaSession(this HtmlHelper helper, CaptchaSetting setting)
         {
             var session = helper.ViewContext.HttpContext.Session;
-            session[Configuration.CaptchaSessionLevel] = level;
+            session[Configuration.CaptchaSessionLevel] = setting.Level;
         }
 
-        private static string CreateCaptchaHtml(this HtmlHelper helper, string inputName)
+        private static string CreateCaptchaHtml(this HtmlHelper helper, CaptchaSetting setting)
         {
             var html = new StringBuilder();
-            var container = new TagBuilder("div");
+            var tagName = setting.IsForm ? "form" : "div";
+            var container = new TagBuilder(tagName);
             container.MergeAttribute("class", "captcha-container");
+            if (setting.IsForm)
+            {
+                container.MergeAttribute("method", "post");
+            }
+
             html.Append(container.ToString(TagRenderMode.StartTag));
-            //html.Append(CreateInstruction(helper));
+            html.Append(CreateHint(helper));
             html.Append(CreateCaptchaImage(helper));
-            html.Append(CreateCaptchaInput(helper, inputName));
+            html.Append(CreateCaptchaInput(helper, setting.InputName));
+            if (setting.IsShowButton)
+            {
+                html.Append(CreateButton(helper, setting));
+            }
+
             html.Append(container.ToString(TagRenderMode.EndTag));
             html.Append(CreateCaptchaScript(helper));
             return html.ToString();
@@ -47,7 +58,7 @@
             var inputBuilder = new TagBuilder("input");
             inputBuilder.MergeAttribute("class", "captcha-input");
             inputBuilder.MergeAttribute("name", inputName);
-            //inputBuilder.MergeAttribute("placeholder", Configuration.CaptchaInputPlaceholder);
+            //inputBuilder.MergeAttribute("placeholder", Lang.InputPlaceholder);
             html.Append(row.ToString(TagRenderMode.StartTag));
             html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
             html.Append(row.ToString(TagRenderMode.EndTag));
@@ -64,25 +75,38 @@
             imageBuilder.MergeAttribute("class", "captcha-image");
             imageBuilder.MergeAttribute("src", imageUrl);
 
-            var refreshIconUrl = CreateActionUrl(helper, "RefreshIcon");
-            var refreshIconBuilder = new TagBuilder("img");
-            refreshIconBuilder.MergeAttribute("class", "refresh-icon");
-            refreshIconBuilder.MergeAttribute("src", refreshIconUrl);
+            var refreshIconBuilder = new TagBuilder("i");
+            refreshIconBuilder.MergeAttribute("class", "icon-refresh");
+            refreshIconBuilder.MergeAttribute("title", Lang.RefreshTitle);
 
             html.Append(row.ToString(TagRenderMode.StartTag));
             html.Append(imageBuilder.ToString(TagRenderMode.SelfClosing));
-            html.Append(refreshIconBuilder.ToString(TagRenderMode.SelfClosing));
+            html.Append(refreshIconBuilder.ToString(TagRenderMode.StartTag));
+            html.Append(refreshIconBuilder.ToString(TagRenderMode.EndTag));
             html.Append(row.ToString(TagRenderMode.EndTag));
             return html.ToString();
         }
 
-        private static string CreateInstruction(HtmlHelper helper)
+        private static string CreateHint(HtmlHelper helper)
         {
             var html = new StringBuilder();
-            var row = CreateRowTag(helper, "row-instruction");
+            var row = CreateRowTag(helper, "row-hint");
             html.Append(row.ToString(TagRenderMode.StartTag));
-            html.Append($"<div class='captcha-instruction'>{Lang.IamNotARobot}</div>");
+            html.Append("<i class='icon-check-circle'></i>");
+            html.Append($"<span class='captcha-hint'>{Lang.IamNotARobot}</span>");
             html.Append(row.ToString(TagRenderMode.EndTag));
+            return html.ToString();
+        }
+
+        private static string CreateButton(HtmlHelper helper, CaptchaSetting setting)
+        {
+            var html = new StringBuilder();
+            var tag = new TagBuilder("button");
+            tag.MergeAttribute("type", "submit");
+            tag.MergeAttribute("class", "captcha-button " + setting.ButtonClassname);
+            html.Append(tag.ToString(TagRenderMode.StartTag));
+            html.Append(Lang.ButtonText);
+            html.Append(tag.ToString(TagRenderMode.EndTag));
             return html.ToString();
         }
 

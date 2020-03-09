@@ -1,5 +1,6 @@
 ﻿namespace Alpha.Captcha.Mvc
 {
+    using Alpha.Captcha.Resources;
     using System;
     using System.Web.Mvc;
 
@@ -7,7 +8,7 @@
     public class CaptchaValidationAttribute : ActionFilterAttribute
     {
         public CaptchaValidationAttribute()
-            :this(Configuration.CaptchaInputName, Configuration.CaptchaValidationErrorMessage)
+            :this(Configuration.CaptchaInputName, Lang.ValidateErrorMessage)
         {
         }
 

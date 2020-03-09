@@ -118,6 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="IamNotARobot" xml:space="preserve">
-    <value>I'm not a robot</value>
+    <value>我不是機器人</value>
   </data>
 </root>

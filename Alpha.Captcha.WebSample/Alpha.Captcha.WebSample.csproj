@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Views\Home\Feedback.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Captcha\Alpha.Captcha.csproj">

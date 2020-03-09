@@ -3,7 +3,11 @@
     "outputFileName": "Resources/captcha.min.js",
     "inputFiles": [
       "Resources/captcha.js"
-    ]
+    ],
+    "minify": {
+      "enabled": false,
+      "sourceMap": false
+    }
   },
   {
     "outputFileName": "..\\Alpha.Captcha.WebSample\\Resources\\captcha.js",

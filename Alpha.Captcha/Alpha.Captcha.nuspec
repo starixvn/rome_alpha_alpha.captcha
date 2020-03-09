@@ -1,17 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<package >
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Alpha.Captcha</id>
-    <version>0.0.6</version>
+    <version>1.0.0</version>
     <title>Alpha.Captcha</title>
-    <authors>Leo</authors>
+    <authors>leo.vo</authors>
     <owners>Nexdev</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <license type="expression">MIT</license>
+    <description>MVC Captcha</description>
     <projectUrl>https://gitlab.nexdev.net/rome/alpha/alpha.captcha</projectUrl>
-    <description>.NET web captcha component</description>
-    <releaseNotes></releaseNotes>
-    <copyright>Copyright 2020</copyright>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.1" />
+    </dependencies>
   </metadata>
-  <files />
+  <files>
+    <file src="bin\release\th-TH\Alpha.Captcha.resources.dll" target="lib\net461\th-TH\Alpha.Captcha.resources.dll" />
+    <file src="bin\release\vi-VN\Alpha.Captcha.resources.dll" target="lib\net461\vi-VN\Alpha.Captcha.resources.dll" />
+    <file src="bin\release\zh-CN\Alpha.Captcha.resources.dll" target="lib\net461\zh-CN\Alpha.Captcha.resources.dll" />
+    <file src="bin\release\zh-TW\Alpha.Captcha.resources.dll" target="lib\net461\zh-TW\Alpha.Captcha.resources.dll" />
+  </files>
 </package>

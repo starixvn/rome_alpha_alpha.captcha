@@ -1,20 +1,71 @@
-﻿<!DOCTYPE html>
+﻿@using Alpha.Captcha
+@using System.Threading
+@{
+    var isDevelopment = (bool)ViewData["IsDevelopment"];
+    var lang = Thread.CurrentThread.CurrentUICulture.Name;
+    var selectList = new List<SelectListItem>
+{
+new SelectListItem
+{
+    Text = "English",
+    Value = "en-US"
+},
+new SelectListItem
+{
+    Text = "Thailand",
+    Value = "th-TH"
+},
+new SelectListItem
+{
+    Text = "Vietnam",
+    Value = "vi-VN"
+}
+};
+    selectList.ForEach(item => item.Selected = item.Value == lang);
+}
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+    @if (isDevelopment)
+    {
+        <link href="~/Resources/captcha.css" rel="stylesheet" />
+    }
+    else
+    {
+        <link href="@Configuration.CaptchaStylesheet" rel="stylesheet" />
+    }
     @RenderSection("styles", required: false)
 </head>
 <body>
     <div class="container body-content">
+        <div>
+            Select language:
+            @Html.DropDownList("language", selectList)
+        </div>
+        <br />
         @RenderBody()
         <hr />
         <footer>
             <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
         </footer>
     </div>
-
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var languageSelect = document.getElementById("language");
+            languageSelect.onchange = function () {
+                var url = window.location.href.split('?')[0];
+                var newURL = url + '?lang=' + languageSelect.value;
+                location.replace(newURL);
+            }
+        });
+    </script>
+    @if (isDevelopment)
+    {
+        <script src="~/Resources/captcha.js"></script>
+    }
     @RenderSection("scripts", required: false)
 </body>
 </html>

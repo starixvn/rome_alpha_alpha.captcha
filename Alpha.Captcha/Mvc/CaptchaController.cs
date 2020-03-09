@@ -11,6 +11,7 @@
     public class CaptchaController : Controller
     {
         private static string scriptResource;
+        private static string stylesheetResource;
         private readonly ICaptchaService captchaService;
 
         public CaptchaController()
@@ -22,6 +23,7 @@
         {
             this.captchaService = captchaService;
             scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
+            stylesheetResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.css");
         }
 
         [HttpGet]
@@ -37,16 +39,15 @@
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
         }
 
+        [HttpGet]
         [OutputCache(Duration = int.MaxValue)]
-        public ActionResult RefreshIcon()
+        public ActionResult Stylesheet()
         {
-            return File(ResourceHelpers.ReadStream("Alpha.Captcha.Resources.refresh-icon.svg"), "image/svg+xml; charset=utf-8");
-        }
-
-        [OutputCache(Duration = int.MaxValue)]
-        public ActionResult StyleSheet()
-        {
-            return Content(ResourceHelpers.ReadString("Alpha.Captcha.Resources.jquery.captcha.css"), "text/css");
+#if DEBUG
+            return Content(string.Empty, "text/css");
+#else
+            return Content(stylesheetResource, "text/css");
+#endif
         }
 
         [HttpGet]
