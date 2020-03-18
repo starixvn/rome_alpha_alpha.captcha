@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var captchaImage = captchaContainer.getElementsByClassName('captcha-image')[0];
     var captchaImageSrc = captchaImage.getAttribute('src');
     var captchaInput = captchaContainer.getElementsByClassName('captcha-input')[0];
-    var captchaRefreshIcon = captchaContainer.getElementsByClassName('icon-refresh')[0];
+    var captchaRefreshIcon = captchaContainer.getElementsByClassName('captcha-icon-refresh')[0];
     captchaImage.addEventListener('load', function () {
         captchaInput.focus();
     });

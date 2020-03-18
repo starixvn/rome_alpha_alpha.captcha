@@ -2,9 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Alpha.Captcha</id>
-    <version>1.0.1</version>
+    <version>1.0.5</version>
     <title>Alpha.Captcha</title>
-    <authors>leo.vo</authors>
+    <authors>Starixsoft</authors>
     <owners>Nexdev</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>MVC Captcha</description>

@@ -120,4 +120,7 @@
   <data name="IamNotARobot" xml:space="preserve">
     <value>Tôi không phải là người máy</value>
   </data>
+  <data name="ValidateErrorMessage" xml:space="preserve">
+    <value>Đoạn mã  bạn nhập không có thực</value>
+  </data>
 </root>

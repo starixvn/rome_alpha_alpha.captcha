@@ -3,7 +3,7 @@
     const captchaImage = captchaContainer.getElementsByClassName('captcha-image')[0];
     const captchaImageSrc = captchaImage.getAttribute('src');
     const captchaInput = captchaContainer.getElementsByClassName('captcha-input')[0] as HTMLInputElement;
-    const captchaRefreshIcon = captchaContainer.getElementsByClassName('icon-refresh')[0];
+    const captchaRefreshIcon = captchaContainer.getElementsByClassName('captcha-icon-refresh')[0];
 
     captchaImage.addEventListener('load', () => {
         captchaInput.focus();

@@ -1,5 +1,8 @@
 ﻿namespace Alpha.Captcha.Models
 {
+    using System;
+
+    [Serializable]
     public class CaptchaSession
     {
         public CaptchaSession(string functionName, string text, CaptchaLevels level)

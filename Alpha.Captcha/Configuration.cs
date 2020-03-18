@@ -1,5 +1,6 @@
 ﻿namespace Alpha.Captcha
 {
+    using Alpha.Captcha.Helpers;
     using System.Web;
     using System.Web.Mvc;
 
@@ -14,7 +15,7 @@
             get
             {
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
-                return urlHelper.Action("Stylesheet", "Captcha");
+                return $"{urlHelper.Action("Stylesheet", "Captcha")}?v={AssemblyHelpers.Version}";
             }
         }
 

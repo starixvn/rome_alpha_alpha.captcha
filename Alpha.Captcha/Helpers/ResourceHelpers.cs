@@ -3,7 +3,7 @@
     using System.Drawing;
     using System.IO;
 
-    public static class ResourceHelpers
+    internal static class ResourceHelpers
     {
         public static string ReadString(string resourcePath)
         {

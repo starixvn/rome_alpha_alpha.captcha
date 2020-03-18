@@ -86,7 +86,7 @@
             imageBuilder.MergeAttribute("src", imageUrl);
 
             var refreshIconBuilder = new TagBuilder("i");
-            refreshIconBuilder.MergeAttribute("class", "icon-refresh");
+            refreshIconBuilder.MergeAttribute("class", "captcha-icon-refresh");
             refreshIconBuilder.MergeAttribute("title", Lang.RefreshTitle);
 
             html.Append(row.ToString(TagRenderMode.StartTag));
@@ -102,7 +102,7 @@
             var html = new StringBuilder();
             var row = CreateRowTag(helper, "row-hint");
             html.Append(row.ToString(TagRenderMode.StartTag));
-            html.Append("<i class='icon-check-circle'></i>");
+            html.Append("<i class='captcha-icon-check-circle'></i>");
             html.Append($"<span class='captcha-hint'>{Lang.IamNotARobot}</span>");
             html.Append(row.ToString(TagRenderMode.EndTag));
             return html.ToString();
