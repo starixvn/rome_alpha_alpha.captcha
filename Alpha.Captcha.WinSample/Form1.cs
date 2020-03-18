@@ -15,7 +15,7 @@ namespace Alpha.Captcha.WinSample
 
         private void GenerateClick(object sender, EventArgs e)
         {
-            var captchaService = new CaptchaService();
+            var captchaService = Configuration.Resolve<CaptchaService>();
             var bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {

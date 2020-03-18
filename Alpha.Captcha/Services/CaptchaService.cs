@@ -1,6 +1,5 @@
 ﻿namespace Alpha.Captcha.Services
 {
-    using Alpha.Captcha.Helpers;
     using Alpha.Captcha.Models;
     using System;
     using System.Drawing;
@@ -20,11 +19,6 @@
     public class CaptchaService : ICaptchaService
     {
         private readonly Random random;
-
-        public CaptchaService()
-            : this(RandomProvider.GetThreadRandom())
-        {
-        }
 
         public CaptchaService(Random random)
         {

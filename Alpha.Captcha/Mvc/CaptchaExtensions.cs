@@ -11,18 +11,9 @@
     {
         public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaSetting setting)
         {
-            CreateCaptchaSession(helper, setting);
+            var sessionService = Configuration.Resolve<SessionService>();
+            sessionService.Create(setting);
             return MvcHtmlString.Create(CreateCaptchaHtml(helper, setting));
-        }
-
-        private static void CreateCaptchaSession(this HtmlHelper helper, CaptchaSetting setting)
-        {
-            var session = helper.ViewContext.HttpContext.Session;
-            var captchaService = new CaptchaService();
-            var captchaText = captchaService.RandomText(CaptchaProfiles.DefaultTextOptions);
-            var captchaSession = new CaptchaSession(setting.FunctionName, captchaText, setting.Level);
-            var sessionKey = Configuration.GetCaptchaSessionKey(setting.FunctionName);
-            session[sessionKey] = captchaSession;
         }
 
         private static string CreateCaptchaHtml(this HtmlHelper helper, CaptchaSetting setting)

@@ -2,23 +2,24 @@
 {
     using Alpha.Captcha.Models;
     using Alpha.Captcha.Resources;
+    using Alpha.Captcha.Services;
     using System;
     using System.Web.Mvc;
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class CaptchaValidationAttribute : ActionFilterAttribute
     {
+        private readonly ISessionService sessionService;
+
         public CaptchaValidationAttribute()
-            :this(Lang.ValidateErrorMessage)
+            :this(Configuration.Resolve<ISessionService>())
         {
         }
 
-        public CaptchaValidationAttribute(string errorMessage)
+        public CaptchaValidationAttribute(ISessionService sessionService)
         {
-            ErrorMessage = errorMessage;
+            this.sessionService = sessionService;
         }
-
-        public string ErrorMessage { get; }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -30,29 +31,30 @@
                 return;
             }
 
-            var sessionKey = Configuration.GetCaptchaSessionKey(functionName);
+            var sessionKey = sessionService.GetSessionKey(functionName);
             var captchaSession = (CaptchaSession)filterContext.HttpContext.Session[sessionKey];
             if (captchaSession != null && inputCaptcha.Equals(captchaSession.Text, StringComparison.InvariantCultureIgnoreCase))
             {
-                CaptchaValidationPassed(filterContext);
+                CaptchaValidationPassed(filterContext, captchaSession);
             }
             else
             {
                 CaptchaValidationFailed(filterContext);
             }
 
-            filterContext.HttpContext.Session[sessionKey] = null;
             base.OnActionExecuting(filterContext);
         }
 
         private void CaptchaValidationFailed(ActionExecutingContext filterContext)
         {
             var modelState = filterContext.Controller.ViewData.ModelState;
-            modelState.AddModelError(Configuration.CaptchaInputName, ErrorMessage);
+            modelState.AddModelError(Configuration.CaptchaInputName, Lang.ValidateErrorMessage);
         }
 
-        private void CaptchaValidationPassed(ActionExecutingContext filterContext)
+        private void CaptchaValidationPassed(ActionExecutingContext filterContext, CaptchaSession captchaSession)
         {
+            var sessionKey = sessionService.GetSessionKey(captchaSession.FunctionName);
+            filterContext.HttpContext.Session[sessionKey] = null;
         }
     }
 }
