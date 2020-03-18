@@ -5,9 +5,10 @@
 
     public class Configuration
     {
-        public static string CaptchaSessionValue = "Alpha.Captcha.Value";
-        public static string CaptchaSessionLevel = "Alpha.Captcha.Level";
-        public static string CaptchaInputName = "Captcha";
+        private static readonly string CaptchaSessionKey = "Alpha.Captcha";
+        public static readonly string CaptchaInputName = "v";
+        public static readonly string CaptchaFunctionName = "f";
+
         public static string CaptchaStylesheet
         {
             get
@@ -15,6 +16,16 @@
                 var urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
                 return urlHelper.Action("Stylesheet", "Captcha");
             }
+        }
+
+        public static string GetCaptchaSessionKey(string functionName)
+        {
+            if (string.IsNullOrEmpty(functionName))
+            {
+                return CaptchaSessionKey;
+            }
+
+            return $"{CaptchaSessionKey}_{functionName.ToLowerInvariant()}";
         }
     }
 }

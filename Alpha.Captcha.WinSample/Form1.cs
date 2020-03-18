@@ -23,8 +23,8 @@ namespace Alpha.Captcha.WinSample
                 {
                     for (var j = 0; j < 4; j++)
                     {
-                        var captchaResult = captchaService.Generate(CaptchaLevels.Medium);
-                        var captchaImage = captchaResult.Image;
+                        var captchaText = captchaService.RandomText(CaptchaProfiles.DefaultTextOptions);
+                        var captchaImage = captchaService.Generate(captchaText, CaptchaLevels.Medium);
                         var x = i * (captchaImage.Width + 5);
                         var y = j * (captchaImage.Height + 5);
                         g.DrawImage(captchaImage, x, y);

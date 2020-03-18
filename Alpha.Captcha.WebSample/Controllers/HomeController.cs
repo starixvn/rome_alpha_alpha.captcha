@@ -61,8 +61,9 @@
 
         private void CreateIndexCaptchaSetting()
         {
-            var captchaSetting = new CaptchaSetting(CaptchaLevels.Low)
+            var captchaSetting = new CaptchaSetting()
             {
+                Level = CaptchaLevels.Low,
                 ButtonClassname = "btn-submit"
             };
             ViewData["CaptchaSetting"] = captchaSetting;
@@ -70,8 +71,10 @@
 
         private void CreateFeedbackCaptchaSetting()
         {
-            var captchaSetting = new CaptchaSetting(CaptchaLevels.High)
+            var captchaSetting = new CaptchaSetting
             {
+                FunctionName = "high",
+                Level = CaptchaLevels.High,
                 IsForm = false,
                 IsShowButton = false
             };

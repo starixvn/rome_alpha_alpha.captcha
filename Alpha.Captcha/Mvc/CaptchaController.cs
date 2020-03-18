@@ -29,11 +29,28 @@
         [HttpGet]
         public void Image()
         {
-            var captchaLevelObject = Session[Configuration.CaptchaSessionLevel];
-            var captchaLevel = captchaLevelObject == null ? CaptchaLevels.Extreme : (CaptchaLevels)captchaLevelObject;
-            var captchaResult = captchaService.Generate(captchaLevel);
-            WriteToSession(HttpContext.Session, captchaResult.Text);
-            WriteToResponse(Response, captchaResult.Image);
+            var captchaText = "ERROR";
+            var captchaLevel = CaptchaLevels.Low;
+            var functionName = HttpContext.Request.QueryString[Configuration.CaptchaFunctionName];
+            var isRefresh = !string.IsNullOrEmpty(HttpContext.Request.QueryString["t"]);
+            var sessionKey = Configuration.GetCaptchaSessionKey(functionName);
+            var captchaSession = (CaptchaSession)Session[sessionKey];
+            if(captchaSession != null && isRefresh)
+            {
+                var captchaService = new CaptchaService();
+                captchaText = captchaService.RandomText(CaptchaProfiles.DefaultTextOptions);
+                captchaSession = new CaptchaSession(captchaSession.FunctionName, captchaText, captchaSession.Level);
+                Session[sessionKey] = captchaSession;
+            }
+
+            if (captchaSession != null)
+            {
+                captchaText = captchaSession.Text;
+                captchaLevel = captchaSession.Level;
+            }
+
+            var captchaImage = captchaService.Generate(captchaText, captchaLevel);
+            WriteToResponse(Response, captchaImage);
             Response.Cache.SetNoServerCaching();
             Response.Cache.SetNoStore();
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
@@ -62,11 +79,6 @@
                 Script = scriptResource
 #endif
             };
-        }
-
-        private void WriteToSession(HttpSessionStateBase session, string text)
-        {
-            Session[Configuration.CaptchaSessionValue] = text;
         }
 
         private void WriteToResponse(HttpResponseBase response, Image image)

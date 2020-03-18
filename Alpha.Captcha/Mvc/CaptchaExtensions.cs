@@ -3,16 +3,12 @@
     using Alpha.Captcha.Helpers;
     using Alpha.Captcha.Models;
     using Alpha.Captcha.Resources;
+    using Alpha.Captcha.Services;
     using System.Text;
     using System.Web.Mvc;
 
     public static class CaptchaExtensions
     {
-        public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaLevels level)
-        {
-            return Captcha(helper, new CaptchaSetting(level));
-        }
-
         public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaSetting setting)
         {
             CreateCaptchaSession(helper, setting);
@@ -22,7 +18,11 @@
         private static void CreateCaptchaSession(this HtmlHelper helper, CaptchaSetting setting)
         {
             var session = helper.ViewContext.HttpContext.Session;
-            session[Configuration.CaptchaSessionLevel] = setting.Level;
+            var captchaService = new CaptchaService();
+            var captchaText = captchaService.RandomText(CaptchaProfiles.DefaultTextOptions);
+            var captchaSession = new CaptchaSession(setting.FunctionName, captchaText, setting.Level);
+            var sessionKey = Configuration.GetCaptchaSessionKey(setting.FunctionName);
+            session[sessionKey] = captchaSession;
         }
 
         private static string CreateCaptchaHtml(this HtmlHelper helper, CaptchaSetting setting)
@@ -37,9 +37,14 @@
             }
 
             html.Append(container.ToString(TagRenderMode.StartTag));
+            if (!string.IsNullOrWhiteSpace(setting.FunctionName))
+            {
+                html.Append($"<input name='{Configuration.CaptchaFunctionName}' value='{setting.FunctionName}' hidden />");
+            }
+
             html.Append(CreateHint(helper));
-            html.Append(CreateCaptchaImage(helper));
-            html.Append(CreateCaptchaInput(helper, setting.InputName));
+            html.Append(CreateCaptchaImage(helper, setting));
+            html.Append(CreateCaptchaInput(helper));
             if (setting.IsShowButton)
             {
                 html.Append(CreateButton(helper, setting));
@@ -50,14 +55,14 @@
             return html.ToString();
         }
 
-        private static string CreateCaptchaInput(HtmlHelper helper, string inputName)
+        private static string CreateCaptchaInput(HtmlHelper helper)
         {
             var html = new StringBuilder();
             var row = CreateRowTag(helper, "row-input");
 
             var inputBuilder = new TagBuilder("input");
             inputBuilder.MergeAttribute("class", "captcha-input");
-            inputBuilder.MergeAttribute("name", inputName);
+            inputBuilder.MergeAttribute("name", Configuration.CaptchaInputName);
             //inputBuilder.MergeAttribute("placeholder", Lang.InputPlaceholder);
             html.Append(row.ToString(TagRenderMode.StartTag));
             html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
@@ -65,12 +70,17 @@
             return html.ToString();
         }
 
-        private static string CreateCaptchaImage(HtmlHelper helper)
+        private static string CreateCaptchaImage(HtmlHelper helper, CaptchaSetting setting)
         {
             var html = new StringBuilder();
             var row = CreateRowTag(helper, "row-image");
 
             var imageUrl = CreateActionUrl(helper, "Image", false);
+            if (!string.IsNullOrEmpty(setting.FunctionName))
+            {
+                imageUrl += $"?f={setting.FunctionName.ToLowerInvariant()}";
+            }
+
             var imageBuilder = new TagBuilder("img");
             imageBuilder.MergeAttribute("class", "captcha-image");
             imageBuilder.MergeAttribute("src", imageUrl);

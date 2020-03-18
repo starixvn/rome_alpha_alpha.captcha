@@ -10,7 +10,13 @@ document.addEventListener("DOMContentLoaded", function () {
     captchaRefreshIcon.addEventListener('click', function () {
         captchaInput.value = '';
         captchaInput.classList.remove('invalid');
-        var newCaptchaImageSrc = captchaImageSrc + "?t=" + Date.now();
+        var newCaptchaImageSrc = '';
+        if (captchaImageSrc.indexOf('?') === -1) {
+            newCaptchaImageSrc = captchaImageSrc + "?t=" + Date.now();
+        }
+        else {
+            newCaptchaImageSrc = captchaImageSrc + "&t=" + Date.now();
+        }
         captchaImage.setAttribute('src', newCaptchaImageSrc);
     });
     if (captchaContainer.tagName.toUpperCase() === 'FORM') {
@@ -28,3 +34,4 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+//# sourceMappingURL=captcha.js.map

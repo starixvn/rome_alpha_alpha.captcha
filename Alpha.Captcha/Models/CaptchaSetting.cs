@@ -2,19 +2,30 @@
 {
     public class CaptchaSetting
     {
-        public CaptchaSetting(CaptchaLevels level)
+        public CaptchaSetting()
         {
-            Level = level;
+            Level = CaptchaLevels.Extreme;
+            IsForm = true;
+            IsShowButton = true;
         }
 
-        public CaptchaLevels Level { get; private set; }
+        public string FunctionName { get; set; }
 
-        public string InputName { get; } = Configuration.CaptchaInputName;
+        public CaptchaLevels Level { get; set; }
 
-        public bool IsForm { get; set; } = true;
+        /// <summary>
+        /// render captcha as a form control
+        /// </summary>
+        public bool IsForm { get; set; }
 
-        public bool IsShowButton { get; set; } = true;
+        /// <summary>
+        /// add button in form
+        /// </summary>
+        public bool IsShowButton { get; set; }
 
+        /// <summary>
+        /// add custom class to button
+        /// </summary>
         public string ButtonClassname { get; set; }
     }
 }

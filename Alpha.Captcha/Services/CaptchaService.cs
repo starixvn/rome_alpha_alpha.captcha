@@ -10,9 +10,11 @@
 
     public interface ICaptchaService
     {
-        CaptchaResult Generate(CaptchaOptions captchaOptions);
+        Image Generate(string captchaText, CaptchaImageOptions captchaImageOptions);
 
-        CaptchaResult Generate(CaptchaLevels captchaLevel);
+        Image Generate(string captchaText, CaptchaLevels captchaLevel);
+
+        string RandomText(CaptchaTextOptions captchaTextOptions);
     }
 
     public class CaptchaService : ICaptchaService
@@ -29,7 +31,19 @@
             this.random = random;
         }
 
-        private static CaptchaOptions GetCaptchaOptions(CaptchaLevels level)
+        public string RandomText(CaptchaTextOptions captchaTextOptions)
+        {
+            var sb = new StringBuilder(captchaTextOptions.TextLength);
+            var maxLength = captchaTextOptions.Chars.Length;
+            for (var i = 0; i < captchaTextOptions.TextLength; i++)
+            {
+                sb.Append(captchaTextOptions.Chars[random.Next(maxLength)]);
+            }
+
+            return sb.ToString();
+        }
+
+        private static CaptchaImageOptions GetCaptchaImageOptions(CaptchaLevels level)
         {
             switch (level)
             {
@@ -46,15 +60,13 @@
             }
         }
 
-        public CaptchaResult Generate(CaptchaLevels level)
+        public Image Generate(string captchaText, CaptchaLevels level)
         {
-            var captchaOptions = GetCaptchaOptions(level);
-            return Generate(captchaOptions);
+            return Generate(captchaText, GetCaptchaImageOptions(level));
         }
 
-        public CaptchaResult Generate(CaptchaOptions captchaOptions)
+        public Image Generate(string captchaText, CaptchaImageOptions captchaOptions)
         {
-            var captchaText = RandomText(captchaOptions);
             var captchaImage = new Bitmap(captchaOptions.Width, captchaOptions.Height, PixelFormat.Format24bppRgb);
             using (var gr = Graphics.FromImage(captchaImage))
             {
@@ -66,7 +78,7 @@
                 }
 
                 var charOffset = 0;
-                var charWidth = captchaOptions.Width / captchaOptions.TextLength;
+                var charWidth = captchaOptions.Width / captchaText.Length;
                 using (var br = new SolidBrush(captchaOptions.FontColor))
                 {
                     foreach (var c in captchaText)
@@ -88,24 +100,12 @@
                 AddLine(captchaOptions, gr, rect);
             }
 
-            return new CaptchaResult(captchaText, captchaImage);
+            return captchaImage;
         }
 
-        private string RandomFontFamily(CaptchaOptions captchaOptions)
+        private string RandomFontFamily(CaptchaImageOptions captchaOptions)
         {
             return captchaOptions.Fonts[random.Next(0, captchaOptions.Fonts.Length)];
-        }
-
-        private string RandomText(CaptchaOptions captchaOptions)
-        {
-            var sb = new StringBuilder(captchaOptions.TextLength);
-            var maxLength = captchaOptions.Chars.Length;
-            for (var i = 0; i < captchaOptions.TextLength; i++)
-            {
-                sb.Append(captchaOptions.Chars[random.Next(maxLength)]);
-            }
-
-            return sb.ToString();
         }
 
         private PointF RandomPoint(Rectangle rect)
@@ -131,7 +131,7 @@
             return gp;
         }
 
-        private Font GetFont(CaptchaOptions captchaOptions)
+        private Font GetFont(CaptchaImageOptions captchaOptions)
         {
             var density = 0f;
             switch (captchaOptions.FontWarp)
@@ -158,7 +158,7 @@
             return new Font(fname, fsize, FontStyle.Bold);
         }
 
-        private void WarpText(CaptchaOptions captchaOptions, GraphicsPath textPath, Rectangle rect)
+        private void WarpText(CaptchaImageOptions captchaOptions, GraphicsPath textPath, Rectangle rect)
         {
             float WarpDivisor = 1.0f;
             float RangeModifier = 1.0f;
@@ -201,7 +201,7 @@
             textPath.Warp(points, rectF, m, WarpMode.Perspective, 0);
         }
 
-        private void AddNoise(CaptchaOptions captchaOptions, Graphics graphics, Rectangle rect)
+        private void AddNoise(CaptchaImageOptions captchaOptions, Graphics graphics, Rectangle rect)
         {
             int density = 0;
             int size = 0;
@@ -237,7 +237,7 @@
             }
         }
 
-        private void AddLine(CaptchaOptions captchaOptions, Graphics graphics, Rectangle rect)
+        private void AddLine(CaptchaImageOptions captchaOptions, Graphics graphics, Rectangle rect)
         {
             int length = 0;
             float width = 1.0f;

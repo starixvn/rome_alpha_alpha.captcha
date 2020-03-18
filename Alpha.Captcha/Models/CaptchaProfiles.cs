@@ -32,10 +32,11 @@
             "verdana"
         };
 
-        public static CaptchaOptions Low = new CaptchaOptions(
+        public static CaptchaTextOptions DefaultTextOptions = new CaptchaTextOptions(DefaultTextLength, DefaultChars);
+
+        public static CaptchaImageOptions Low = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
-            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
@@ -43,13 +44,11 @@
             FontWarpFactor.Low,
             BackgroundNoiseLevel.Low,
             LineNoiseLevel.Low,
-            DefaultChars,
             DefaultFonts);
 
-        public static CaptchaOptions Medium = new CaptchaOptions(
+        public static CaptchaImageOptions Medium = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
-            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
@@ -57,13 +56,11 @@
             FontWarpFactor.Medium,
             BackgroundNoiseLevel.Medium,
             LineNoiseLevel.Medium,
-            DefaultChars,
             DefaultFonts);
 
-        public static CaptchaOptions High = new CaptchaOptions(
+        public static CaptchaImageOptions High = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
-            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
@@ -71,13 +68,11 @@
             FontWarpFactor.High,
             BackgroundNoiseLevel.High,
             LineNoiseLevel.High,
-            DefaultChars,
             DefaultFonts);
 
-        public static CaptchaOptions Extreme = new CaptchaOptions(
+        public static CaptchaImageOptions Extreme = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
-            DefaultTextLength,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
@@ -85,7 +80,6 @@
             FontWarpFactor.Extreme,
             BackgroundNoiseLevel.Extreme,
             LineNoiseLevel.Extreme,
-            DefaultChars,
             DefaultFonts);
     }
 }

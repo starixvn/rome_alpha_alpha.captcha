@@ -2,12 +2,11 @@
 {
     using System.Drawing;
 
-    public class CaptchaOptions
+    public class CaptchaImageOptions
     {
-        public CaptchaOptions(
+        public CaptchaImageOptions(
             int width,
             int height,
-            int textLength,
             Color backColor,
             Color fontColor,
             Color noiseColor,
@@ -15,13 +14,11 @@
             FontWarpFactor fontWarp,
             BackgroundNoiseLevel backgroundNoise,
             LineNoiseLevel lineNoise,
-            string chars,
             string[] fonts
             )
         {
             Width = width;
             Height = height;
-            TextLength = textLength;
             BackColor = backColor;
             FontColor = fontColor;
             NoiseColor = noiseColor;
@@ -29,15 +26,12 @@
             FontWarp = fontWarp;
             BackgroundNoise = backgroundNoise;
             LineNoise = lineNoise;
-            Chars = chars;
             Fonts = fonts;
         }
 
         public int Width { get; }
 
         public int Height { get; }
-
-        public int TextLength { get; }
 
         public Color BackColor { get; }
 
@@ -52,8 +46,6 @@
         public BackgroundNoiseLevel BackgroundNoise { get; }
 
         public LineNoiseLevel LineNoise { get; }
-
-        public string Chars { get; }
 
         public string[] Fonts { get; }
     }
