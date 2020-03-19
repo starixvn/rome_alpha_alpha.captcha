@@ -12,13 +12,7 @@
     captchaRefreshIcon.addEventListener('click', () => {
         captchaInput.value = '';
         captchaInput.classList.remove('invalid');
-        let newCaptchaImageSrc = '';
-        if (captchaImageSrc.indexOf('?') === -1) {
-            newCaptchaImageSrc = `${captchaImageSrc}?t=${Date.now()}`;
-        } else {
-            newCaptchaImageSrc = `${captchaImageSrc}&t=${Date.now()}`;
-        }
-
+        const newCaptchaImageSrc = `${captchaImageSrc}${captchaImageSrc.indexOf('?') === -1 ? '?' : '&'}t=${Date.now()}`;
         captchaImage.setAttribute('src', newCaptchaImageSrc);
     });
 

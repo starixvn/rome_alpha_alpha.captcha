@@ -10,13 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     captchaRefreshIcon.addEventListener('click', function () {
         captchaInput.value = '';
         captchaInput.classList.remove('invalid');
-        var newCaptchaImageSrc = '';
-        if (captchaImageSrc.indexOf('?') === -1) {
-            newCaptchaImageSrc = captchaImageSrc + "?t=" + Date.now();
-        }
-        else {
-            newCaptchaImageSrc = captchaImageSrc + "&t=" + Date.now();
-        }
+        var newCaptchaImageSrc = "" + captchaImageSrc + (captchaImageSrc.indexOf('?') === -1 ? '?' : '&') + "t=" + Date.now();
         captchaImage.setAttribute('src', newCaptchaImageSrc);
     });
     if (captchaContainer.tagName.toUpperCase() === 'FORM') {
