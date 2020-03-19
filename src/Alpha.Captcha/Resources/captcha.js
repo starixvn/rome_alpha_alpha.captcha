@@ -34,4 +34,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-//# sourceMappingURL=captcha.js.map
