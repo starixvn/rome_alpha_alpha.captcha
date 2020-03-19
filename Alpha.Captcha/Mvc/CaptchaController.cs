@@ -20,7 +20,7 @@
         {
         }
 
-        public CaptchaController(ICaptchaService captchaService, ISessionService sessionService)
+        private CaptchaController(ICaptchaService captchaService, ISessionService sessionService)
         {
             this.captchaService = captchaService;
             this.sessionService = sessionService;

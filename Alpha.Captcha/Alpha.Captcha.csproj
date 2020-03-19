@@ -7,13 +7,13 @@
     <RepositoryUrl>https://gitlab.nexdev.net/rome/alpha/alpha.captcha</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<Deterministic>true</Deterministic>
-    <AssemblyVersion>1.0.6</AssemblyVersion>
-    <FileVersion>1.0.6</FileVersion>
+    <AssemblyVersion>1.0.7</AssemblyVersion>
+    <FileVersion>1.0.7</FileVersion>
     <RepositoryType>git</RepositoryType>
     <PackageTags>mvc captcha</PackageTags>
     <Authors>Starixsoft</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Version>1.0.6</Version>
+    <Version>1.0.7</Version>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\captcha.min.css">
