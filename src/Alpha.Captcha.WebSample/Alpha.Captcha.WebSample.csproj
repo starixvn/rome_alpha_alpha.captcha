@@ -149,7 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Alpha.Captcha\Alpha.Captcha.csproj">
-      <Project>{57f8b521-f8b6-4221-9ece-02d173733610}</Project>
+      <Project>{61a61e4c-4d6d-432d-9243-650c049761c9}</Project>
       <Name>Alpha.Captcha</Name>
     </ProjectReference>
   </ItemGroup>

@@ -13,6 +13,6 @@
     "minify": {
       "enabled": false
     },
-    "includeInProject": true
+    "includeInProject": false
   }
 ]

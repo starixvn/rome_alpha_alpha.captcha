@@ -5,7 +5,7 @@
       "Resources/captcha.js"
     ],
     "minify": {
-      "enabled": false,
+      "enabled": true,
       "sourceMap": false
     }
   },
@@ -15,7 +15,8 @@
       "Resources/captcha.js"
     ],
     "minify": {
-      "enabled": false
+      "enabled": false,
+      "sourceMap": false
     },
     "includeInProject":  false
   }
