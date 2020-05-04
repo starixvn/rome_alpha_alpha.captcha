@@ -80,5 +80,36 @@
             };
             ViewData["CaptchaSetting"] = captchaSetting;
         }
+
+        [HttpGet]
+        public ActionResult Ajax()
+        {
+            CreateAjaxCaptchaSetting();
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Ajax")]
+        [CaptchaValidation]
+        public ActionResult AjaxIndex()
+        {
+            if (ModelState.IsValid)
+            {
+                return new HttpStatusCodeResult(200, "Valid code");
+            }
+
+            return new HttpStatusCodeResult(500, "Invalid code");
+        }
+
+        private void CreateAjaxCaptchaSetting()
+        {
+            var captchaSetting = new CaptchaSetting()
+            {
+                FunctionName = "ajax",
+                Level = CaptchaLevels.Low,
+                IsForm = false
+            };
+            ViewData["CaptchaSetting"] = captchaSetting;
+        }
     }
 }

@@ -3,10 +3,10 @@
 @using Alpha.Captcha.WebSample.Models
 @model Feedback
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Custom Form Example";
     var captchaSetting = (CaptchaSetting)ViewData["CaptchaSetting"];
 }
-
+<h1>@ViewBag.Title</h1>
 @using (Html.BeginForm())
 {
 <fieldset>

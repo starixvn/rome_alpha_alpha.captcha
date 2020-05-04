@@ -10,8 +10,8 @@
 
     public class Configuration
     {
-        internal static readonly string CaptchaInputName = "v";
-        internal static readonly string CaptchaFunctionName = "f";
+        internal static readonly string CaptchaInputName = "c_v";
+        internal static readonly string CaptchaFunctionName = "c_f";
         private static readonly IList<object> services = new List<object>();
 
         static Configuration()

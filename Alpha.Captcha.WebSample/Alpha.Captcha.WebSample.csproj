@@ -129,6 +129,7 @@
     <Content Include="Global.asax" />
     <Content Include="Resources\captcha.css" />
     <Content Include="Resources\captcha.js" />
+    <None Include="Views\Home\Ajax.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

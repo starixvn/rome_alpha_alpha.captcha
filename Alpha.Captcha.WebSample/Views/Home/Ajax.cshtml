@@ -1,0 +1,40 @@
+﻿@using Alpha.Captcha.Mvc
+@using Alpha.Captcha.Models
+@{
+    ViewBag.Title = "Ajax Example";
+    var captchaSetting = (CaptchaSetting)ViewData["CaptchaSetting"];
+}
+<h1>@ViewBag.Title</h1>
+@Html.Captcha(captchaSetting)
+@if ((Request.HttpMethod == "POST") && ViewData.ModelState.IsValid)
+{
+    <p class="success">Correct!</p>
+}
+<p class="error">
+    @Html.ValidationSummary()
+</p>
+@section scripts {
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            var btnSubmit = document.getElementsByClassName('captcha-button')[0];
+            btnSubmit.addEventListener('click', function () {
+                var xmlHttp = new XMLHttpRequest();
+                xmlHttp.onreadystatechange = function () {
+                    if (xmlHttp.readyState === 4) {
+                        alert(xmlHttp.statusText);
+                        document.getElementsByClassName('captcha-icon-refresh')[0].click();
+                    }
+                }
+                xmlHttp.open("post", location.href);
+                var formData = new FormData();
+                var inputs = document.getElementsByTagName('input');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].name.startsWith('c_')) {
+                        formData.append(inputs[i].name, inputs[i].value);
+                    }
+                }
+                xmlHttp.send(formData);
+            });
+        });
+    </script>
+}

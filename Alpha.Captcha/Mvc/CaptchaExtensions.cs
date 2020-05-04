@@ -69,7 +69,7 @@
             var imageUrl = CreateActionUrl(helper, "Image", false);
             if (!string.IsNullOrEmpty(setting.FunctionName))
             {
-                imageUrl += $"?f={setting.FunctionName.ToLowerInvariant()}";
+                imageUrl += $"?{Configuration.CaptchaFunctionName}={setting.FunctionName.ToLowerInvariant()}";
             }
 
             var imageBuilder = new TagBuilder("img");

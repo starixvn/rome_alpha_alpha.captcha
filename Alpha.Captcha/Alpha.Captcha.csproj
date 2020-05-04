@@ -13,7 +13,7 @@
     <PackageTags>mvc captcha</PackageTags>
     <Authors>Starixsoft</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\captcha.min.css">

@@ -1,10 +1,10 @@
 ﻿@using Alpha.Captcha.Mvc
 @using Alpha.Captcha.Models
-@using Alpha.Captcha
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "Simple Form Example";
     var captchaSetting = (CaptchaSetting)ViewData["CaptchaSetting"];
 }
+<h1>@ViewBag.Title</h1>
 @Html.Captcha(captchaSetting)
 @if ((Request.HttpMethod == "POST") && ViewData.ModelState.IsValid)
 {
