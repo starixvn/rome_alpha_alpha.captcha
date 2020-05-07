@@ -21,6 +21,12 @@
             this.sessionService = sessionService;
         }
 
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            RemoveCaptchaSessionIfModelStateIsValid(filterContext);
+            base.OnActionExecuted(filterContext);
+        }
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var inputCaptcha = filterContext.HttpContext.Request.Form[Configuration.CaptchaInputName];
@@ -45,6 +51,17 @@
             base.OnActionExecuting(filterContext);
         }
 
+        private void RemoveCaptchaSessionIfModelStateIsValid(ActionExecutedContext filterContext)
+        {
+            var modelState = filterContext.Controller.ViewData.ModelState;
+            if (modelState.IsValid)
+            {
+                var functionName = filterContext.HttpContext.Request.Form[Configuration.CaptchaFunctionName];
+                var sessionKey = sessionService.GetSessionKey(functionName);
+                filterContext.HttpContext.Session[sessionKey] = null;
+            }
+        }
+
         private void CaptchaValidationFailed(ActionExecutingContext filterContext)
         {
             var modelState = filterContext.Controller.ViewData.ModelState;
@@ -53,8 +70,6 @@
 
         private void CaptchaValidationPassed(ActionExecutingContext filterContext, CaptchaSession captchaSession)
         {
-            var sessionKey = sessionService.GetSessionKey(captchaSession.FunctionName);
-            filterContext.HttpContext.Session[sessionKey] = null;
         }
     }
 }

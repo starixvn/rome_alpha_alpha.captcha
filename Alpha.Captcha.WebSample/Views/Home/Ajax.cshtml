@@ -5,6 +5,9 @@
     var captchaSetting = (CaptchaSetting)ViewData["CaptchaSetting"];
 }
 <h1>@ViewBag.Title</h1>
+<label for="username">Username</label>
+<input id="username" name="username" />
+<br />
 @Html.Captcha(captchaSetting)
 @if ((Request.HttpMethod == "POST") && ViewData.ModelState.IsValid)
 {
@@ -27,6 +30,7 @@
                 }
                 xmlHttp.open("post", location.href);
                 var formData = new FormData();
+                formData.append("username", document.getElementById("username").value);
                 var inputs = document.getElementsByTagName('input');
                 for (var i = 0; i < inputs.length; i++) {
                     if (inputs[i].name.startsWith('c_')) {

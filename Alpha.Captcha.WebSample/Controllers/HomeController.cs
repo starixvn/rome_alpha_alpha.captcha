@@ -91,8 +91,13 @@
         [HttpPost]
         [ActionName("Ajax")]
         [CaptchaValidation]
-        public ActionResult AjaxIndex()
+        public ActionResult AjaxIndex(string username)
         {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                ModelState.AddModelError("username", "Username is empty");
+            }
+
             if (ModelState.IsValid)
             {
                 return new HttpStatusCodeResult(200, "Valid code");
