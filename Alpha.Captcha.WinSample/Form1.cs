@@ -34,5 +34,10 @@ namespace Alpha.Captcha.WinSample
 
             pictureBox1.Image = bitmap;
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            GenerateClick(sender, e);
+        }
     }
 }
