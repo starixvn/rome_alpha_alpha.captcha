@@ -10,22 +10,15 @@
 
     public class CaptchaController : Controller
     {
-        private static string scriptResource;
-        private static string stylesheetResource;
+        private static readonly string scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
+        private static readonly string stylesheetResource= ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.css");
         private readonly ICaptchaService captchaService;
         private readonly ISessionService sessionService;
 
         public CaptchaController()
-            : this(Configuration.Resolve<ICaptchaService>(), Configuration.Resolve<ISessionService>())
         {
-        }
-
-        private CaptchaController(ICaptchaService captchaService, ISessionService sessionService)
-        {
-            this.captchaService = captchaService;
-            this.sessionService = sessionService;
-            scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
-            stylesheetResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.css");
+            this.captchaService = captchaService ?? new CaptchaService();
+            this.sessionService = sessionService ?? new SessionService(captchaService);
         }
 
         [HttpGet]
@@ -63,21 +56,11 @@
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
         }
 
-        private CaptchaSession GenerateNewCaptchaSession(string functionName, CaptchaLevels level)
-        {
-            var captchaText = captchaService.RandomText(CaptchaProfiles.DefaultTextOptions);
-            return new CaptchaSession(functionName, captchaText, level);
-        }
-
         [HttpGet]
         [OutputCache(Duration = int.MaxValue)]
         public ActionResult Stylesheet()
         {
-#if DEBUG
-            return Content(string.Empty, "text/css");
-#else
             return Content(stylesheetResource, "text/css");
-#endif
         }
 
         [HttpGet]
@@ -86,11 +69,7 @@
         {
             return new JavaScriptResult
             {
-#if DEBUG
-                Script = string.Empty
-#else
                 Script = scriptResource
-#endif
             };
         }
 

@@ -17,9 +17,9 @@ namespace Alpha.Captcha.WinSample
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 100; i++)
             {
-                var t = new Thread(() =>
+                Thread t = new Thread(() =>
                 {
                     Application.Run(new Form1());
                 });

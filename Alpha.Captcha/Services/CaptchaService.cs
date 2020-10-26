@@ -18,12 +18,9 @@
 
     public class CaptchaService : ICaptchaService
     {
-        private readonly Random random;
+        private readonly Random random = new Random();
 
-        public CaptchaService(Random random)
-        {
-            this.random = random;
-        }
+        public CaptchaService() { }
 
         public string RandomText(CaptchaTextOptions captchaTextOptions)
         {

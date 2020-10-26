@@ -1,7 +1,12 @@
-﻿using Alpha.Captcha.Models;
+﻿using Alpha.Captcha.App_Start;
+using Alpha.Captcha.Models;
 using Alpha.Captcha.Services;
+using SimpleInjector;
+using SimpleInjector.Integration.Web;
+using SimpleInjector.Integration.Web.Mvc;
 using System;
 using System.Drawing;
+using System.Web.Mvc;
 using System.Windows.Forms;
 
 namespace Alpha.Captcha.WinSample
@@ -11,11 +16,24 @@ namespace Alpha.Captcha.WinSample
         public Form1()
         {
             InitializeComponent();
+            // RegisterServices();
+        }
+
+        private void RegisterServices()
+        {
+            var container = new Container();
+
+            container.Options.DefaultScopedLifestyle = new WebRequestLifestyle();
+
+            DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
+            container.Register();
+
+            container.Verify();
         }
 
         private void GenerateClick(object sender, EventArgs e)
         {
-            var captchaService = Configuration.Resolve<CaptchaService>();
+            var captchaService = new CaptchaService();
             var bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             using (Graphics g = Graphics.FromImage(bitmap))
             {

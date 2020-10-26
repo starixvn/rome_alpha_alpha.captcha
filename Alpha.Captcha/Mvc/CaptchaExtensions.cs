@@ -11,7 +11,8 @@
     {
         public static MvcHtmlString Captcha(this HtmlHelper helper, CaptchaSetting setting)
         {
-            var sessionService = Configuration.Resolve<SessionService>();
+            var captchaService = new CaptchaService();
+            var sessionService = new SessionService(captchaService);
             sessionService.Create(setting);
             return MvcHtmlString.Create(CreateCaptchaHtml(helper, setting));
         }
