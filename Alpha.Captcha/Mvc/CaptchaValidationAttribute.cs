@@ -10,15 +10,12 @@
     public class CaptchaValidationAttribute : ActionFilterAttribute
     {
         private readonly ISessionService sessionService;
+        private readonly ICaptchaService captchaService;
 
         public CaptchaValidationAttribute()
-            :this(Configuration.Resolve<ISessionService>())
         {
-        }
-
-        public CaptchaValidationAttribute(ISessionService sessionService)
-        {
-            this.sessionService = sessionService;
+            captchaService = captchaService ?? new CaptchaService();
+            sessionService = sessionService ?? new SessionService(captchaService);
         }
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)

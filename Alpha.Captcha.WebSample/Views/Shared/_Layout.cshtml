@@ -1,7 +1,6 @@
 ﻿@using Alpha.Captcha
 @using System.Threading
 @{
-    var isDevelopment = (bool)ViewData["IsDevelopment"];
     var lang = Thread.CurrentThread.CurrentUICulture.Name;
     var selectList = new List<SelectListItem>
 {
@@ -29,14 +28,7 @@ new SelectListItem
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @if (isDevelopment)
-    {
-        <link href="~/Resources/captcha.css" rel="stylesheet" />
-    }
-    else
-    {
-        <link href="@Configuration.CaptchaStylesheet" rel="stylesheet" />
-    }
+    <link href="~/Resources/captcha.css" rel="stylesheet" />
     @RenderSection("styles", required: false)
 </head>
 <body>
@@ -62,10 +54,7 @@ new SelectListItem
             }
         });
     </script>
-    @if (isDevelopment)
-    {
-        <script src="~/Resources/captcha.js"></script>
-    }
+    <script src="~/Resources/captcha.js"></script>
     @RenderSection("scripts", required: false)
 </body>
 </html>
