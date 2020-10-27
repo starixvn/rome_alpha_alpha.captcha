@@ -33,11 +33,11 @@
 	</EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="2.1.0" />
+    <PackageReference Include="MediatR" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
-    <PackageReference Include="SimpleInjector" Version="3.3.2" />
-    <PackageReference Include="SimpleInjector.Integration.Web" Version="3.3.2" />
-    <PackageReference Include="SimpleInjector.Integration.Web.Mvc" Version="3.3.2" />
+    <PackageReference Include="SimpleInjector" Version="3.2.2" />
+    <PackageReference Include="SimpleInjector.Integration.Web" Version="3.2.2" />
+    <PackageReference Include="SimpleInjector.Integration.Web.Mvc" Version="3.2.2" />
 	<Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>

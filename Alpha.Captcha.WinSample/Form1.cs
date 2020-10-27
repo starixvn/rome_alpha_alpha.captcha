@@ -26,7 +26,7 @@ namespace Alpha.Captcha.WinSample
             container.Options.DefaultScopedLifestyle = new WebRequestLifestyle();
 
             DependencyResolver.SetResolver(new SimpleInjectorDependencyResolver(container));
-            container.Register();
+            container.RegisterAlphaCaptchaMvc();
 
             container.Verify();
         }
