@@ -2,10 +2,7 @@
 {
     public class CaptchaTextOptions
     {
-        public CaptchaTextOptions(
-            int textLength,
-            string chars
-            )
+        public CaptchaTextOptions(int textLength, string chars)
         {
             TextLength = textLength;
             Chars = chars;

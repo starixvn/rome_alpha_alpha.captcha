@@ -1,39 +1,33 @@
 ﻿namespace Alpha.Captcha.Mvc
 {
-    using Alpha.Captcha.Helpers;
-    using Alpha.Captcha.Models;
-    using Alpha.Captcha.Services;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.Web;
     using System.Web.Mvc;
+    using Alpha.Captcha.Helpers;
+    using Alpha.Captcha.Models;
+    using Alpha.Captcha.Services;
 
     public class CaptchaController : Controller
     {
         private static readonly string scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
-        private static readonly string stylesheetResource= ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.css");
+        private static readonly string stylesheetResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.css");
         private readonly ICaptchaService captchaService;
         private readonly ISessionService sessionService;
 
         public CaptchaController()
         {
-            this.captchaService = captchaService ?? new CaptchaService();
-            this.sessionService = sessionService ?? new SessionService(captchaService);
+            captchaService = DependencyResolver.Current.GetService(typeof(ICaptchaService)) as ICaptchaService ?? new CaptchaService();
+            sessionService = DependencyResolver.Current.GetService(typeof(ISessionService)) as ISessionService ?? new SessionService();
         }
 
         [HttpGet]
         public void Image()
         {
-            var functionName = HttpContext.Request.QueryString[Configuration.CaptchaFunctionName];
-            var sessionKey = sessionService.GetSessionKey(functionName);
-            var captchaSession = (CaptchaSession)Session[sessionKey];
-            if(captchaSession == null)
+            var captchaSession = sessionService.Get();
+            if (captchaSession == null)
             {
-                var captchaSetting = new CaptchaSetting
-                {
-                    Level = CaptchaLevels.Extreme
-                };
-                captchaSession = sessionService.Create(captchaSetting);
+                captchaSession = sessionService.Create();
             }
             else
             {
@@ -43,13 +37,13 @@
                     var captchaSetting = new CaptchaSetting
                     {
                         FunctionName = captchaSession.FunctionName,
-                        Level = captchaSession.Level
+                        CaptchaLevel = captchaSession.CaptchaLevel
                     };
                     captchaSession = sessionService.Create(captchaSetting);
                 }
             }
-            
-            var captchaImage = captchaService.Generate(captchaSession.Text, captchaSession.Level);
+
+            var captchaImage = captchaService.Generate(captchaSession.Text, captchaSession.CaptchaLevel);
             WriteToResponse(Response, captchaImage);
             Response.Cache.SetNoServerCaching();
             Response.Cache.SetNoStore();

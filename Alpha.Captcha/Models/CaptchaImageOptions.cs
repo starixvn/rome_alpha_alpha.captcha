@@ -11,9 +11,9 @@
             Color fontColor,
             Color noiseColor,
             Color lineColor,
-            FontWarpFactor fontWarp,
-            BackgroundNoiseLevel backgroundNoise,
-            LineNoiseLevel lineNoise,
+            FontWarpFactors fontWarp,
+            BackgroundNoiseLevels backgroundNoise,
+            LineNoiseLevels lineNoise,
             string[] fonts
             )
         {
@@ -41,11 +41,11 @@
 
         public Color LineColor { get; }
 
-        public FontWarpFactor FontWarp { get; }
+        public FontWarpFactors FontWarp { get; }
 
-        public BackgroundNoiseLevel BackgroundNoise { get; }
+        public BackgroundNoiseLevels BackgroundNoise { get; }
 
-        public LineNoiseLevel LineNoise { get; }
+        public LineNoiseLevels LineNoise { get; }
 
         public string[] Fonts { get; }
     }

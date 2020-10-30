@@ -1,6 +1,6 @@
 ﻿namespace Alpha.Captcha.Models
 {
-    public enum LineNoiseLevel
+    public enum BackgroundNoiseLevels
     {
         None,
         Low,

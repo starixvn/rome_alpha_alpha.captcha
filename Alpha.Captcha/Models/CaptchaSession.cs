@@ -5,17 +5,17 @@
     [Serializable]
     public class CaptchaSession
     {
-        public CaptchaSession(string functionName, string text, CaptchaLevels level)
+        public CaptchaSession(string functionName, string text, CaptchaLevels captchaLevel)
         {
             FunctionName = functionName;
             Text = text;
-            Level = level;
+            CaptchaLevel = captchaLevel;
         }
 
         public string FunctionName { get; private set; }
 
         public string Text { get; private set; }
 
-        public CaptchaLevels Level { get; private set; }
+        public CaptchaLevels CaptchaLevel { get; private set; }
     }
 }

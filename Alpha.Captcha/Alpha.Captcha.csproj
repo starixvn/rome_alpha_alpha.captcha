@@ -7,13 +7,13 @@
     <RepositoryUrl>https://gitlab.nexdev.net/rome/alpha/alpha.captcha</RepositoryUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<Deterministic>true</Deterministic>
-    <AssemblyVersion>1.1.1</AssemblyVersion>
-    <FileVersion>1.1.1</FileVersion>
+    <AssemblyVersion>1.1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1.1</FileVersion>
     <RepositoryType>git</RepositoryType>
     <PackageTags>mvc captcha</PackageTags>
     <Authors>Starixsoft</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Version>1.1.1</Version>
+    <Version>1.1.1.1-beta03</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
@@ -33,11 +33,8 @@
 	</EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="2.0.2" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
     <PackageReference Include="SimpleInjector" Version="3.2.2" />
-    <PackageReference Include="SimpleInjector.Integration.Web" Version="3.2.2" />
-    <PackageReference Include="SimpleInjector.Integration.Web.Mvc" Version="3.2.2" />
 	<Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
