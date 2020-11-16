@@ -1,120 +1,127 @@
 ﻿namespace Alpha.Captcha.WebSample.Controllers
 {
-    using Alpha.Captcha.Models;
-    using Alpha.Captcha.Mvc;
-    using Alpha.Captcha.WebSample.Models;
+    using System.Collections.Generic;
     using System.Globalization;
     using System.Threading;
     using System.Web.Mvc;
+    using Alpha.Captcha.Models;
+    using Alpha.Captcha.Mvc;
+    using Alpha.Captcha.Services;
+    using Alpha.Captcha.WebSample.Models;
 
     public class HomeController : Controller
     {
-        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        private readonly ISessionService sessionService;
+        private readonly CaptchaSetting indexCaptchaSetting = new CaptchaSetting
         {
-#if DEBUG
-            ViewData["IsDevelopment"] = true;
-#else
-            ViewData["IsDevelopment"] = false;
-#endif
+            CaptchaLevel = CaptchaLevels.Low,
+            ButtonClassname = "btn-submit"
+        };
+        private readonly CaptchaSetting feedbackCaptchaSetting = new CaptchaSetting
+        {
+            FunctionName = "high",
+            CaptchaLevel = CaptchaLevels.High,
+            IsForm = false,
+            IsShowButton = false
+        };
+        private readonly CaptchaSetting ajaxCaptchaSetting = new CaptchaSetting
+        {
+            FunctionName = "ajax",
+            CaptchaLevel = CaptchaLevels.Low,
+            IsForm = false
+        };
 
+        public HomeController(ISessionService sessionService)
+        {
+            this.sessionService = sessionService;
+        }
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
             var lang = filterContext.HttpContext.Request.QueryString["lang"];
             if (!string.IsNullOrWhiteSpace(lang))
             {
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo(lang);
                 Thread.CurrentThread.CurrentCulture = Thread.CurrentThread.CurrentUICulture;
             }
+            var langList = new List<SelectListItem>
+            {
+                new SelectListItem
+                {
+                    Text = "English",
+                    Value = "en-US"
+                },
+                new SelectListItem
+                {
+                    Text = "Thailand",
+                    Value = "th-TH"
+                },
+                new SelectListItem
+                {
+                    Text = "Vietnam",
+                    Value = "vi-VN"
+                }
+            };
+            langList.ForEach(item => item.Selected = item.Value == lang);
+            ViewBag.Langs = langList;
 
-            base.OnActionExecuted(filterContext);
+            base.OnActionExecuting(filterContext);
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            CreateIndexCaptchaSetting();
+            ViewData["CaptchaSetting"] = indexCaptchaSetting;
             return View();
         }
 
         [HttpPost]
         [ActionName("Index")]
         [CaptchaValidation]
-        public ActionResult PostIndex()
+        public ActionResult IndexPost()
         {
-            CreateIndexCaptchaSetting();
+            ViewData["CaptchaSetting"] = indexCaptchaSetting;
             return View();
         }
 
         [HttpGet]
         public ActionResult Feedback()
         {
-            CreateFeedbackCaptchaSetting();
+            ViewData["CaptchaSetting"] = feedbackCaptchaSetting;
             return View();
         }
 
         [HttpPost]
-        [ActionName("Feedback")]
         [CaptchaValidation]
-        public ActionResult PostFeedback(Feedback feedback)
+        public ActionResult Feedback(Feedback feedback)
         {
-            CreateFeedbackCaptchaSetting();
+            ViewData["CaptchaSetting"] = feedbackCaptchaSetting;
             return View();
-        }
-
-        private void CreateIndexCaptchaSetting()
-        {
-            var captchaSetting = new CaptchaSetting()
-            {
-                Level = CaptchaLevels.Low,
-                ButtonClassname = "btn-submit"
-            };
-            ViewData["CaptchaSetting"] = captchaSetting;
-        }
-
-        private void CreateFeedbackCaptchaSetting()
-        {
-            var captchaSetting = new CaptchaSetting
-            {
-                FunctionName = "high",
-                Level = CaptchaLevels.High,
-                IsForm = false,
-                IsShowButton = false
-            };
-            ViewData["CaptchaSetting"] = captchaSetting;
         }
 
         [HttpGet]
         public ActionResult Ajax()
         {
-            CreateAjaxCaptchaSetting();
+            ViewData["CaptchaSetting"] = ajaxCaptchaSetting;
             return View();
         }
 
         [HttpPost]
-        [ActionName("Ajax")]
-        [CaptchaValidation]
-        public ActionResult AjaxIndex(string username)
+        [CaptchaValidation()]
+        public ActionResult Ajax(string username)
         {
+            sessionService.Create(ajaxCaptchaSetting);
             if (string.IsNullOrWhiteSpace(username))
             {
-                ModelState.AddModelError("username", "Username is empty");
+                return new HttpStatusCodeResult(500, "Username is empty");
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                return new HttpStatusCodeResult(200, "Valid code");
+                return new HttpStatusCodeResult(500, "Invalid code");
             }
 
-            return new HttpStatusCodeResult(500, "Invalid code");
-        }
-
-        private void CreateAjaxCaptchaSetting()
-        {
-            var captchaSetting = new CaptchaSetting()
-            {
-                FunctionName = "ajax",
-                Level = CaptchaLevels.Low,
-                IsForm = false
-            };
-            ViewData["CaptchaSetting"] = captchaSetting;
+            return new HttpStatusCodeResult(200, "OK");
         }
     }
 }

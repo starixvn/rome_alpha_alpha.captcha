@@ -1,46 +1,33 @@
 ﻿namespace Alpha.Captcha.Mvc
 {
-    using Alpha.Captcha.Helpers;
-    using Alpha.Captcha.Models;
-    using Alpha.Captcha.Services;
     using System.Drawing;
     using System.Drawing.Imaging;
     using System.Web;
     using System.Web.Mvc;
+    using Alpha.Captcha.Helpers;
+    using Alpha.Captcha.Models;
+    using Alpha.Captcha.Services;
 
     public class CaptchaController : Controller
     {
-        private static string scriptResource;
-        private static string stylesheetResource;
+        private static readonly string scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
+        private static readonly string stylesheetResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.css");
         private readonly ICaptchaService captchaService;
         private readonly ISessionService sessionService;
 
         public CaptchaController()
-            : this(Configuration.Resolve<ICaptchaService>(), Configuration.Resolve<ISessionService>())
         {
-        }
-
-        private CaptchaController(ICaptchaService captchaService, ISessionService sessionService)
-        {
-            this.captchaService = captchaService;
-            this.sessionService = sessionService;
-            scriptResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.js");
-            stylesheetResource = ResourceHelpers.ReadString("Alpha.Captcha.Resources.captcha.min.css");
+            captchaService = DependencyResolver.Current.GetService(typeof(ICaptchaService)) as ICaptchaService ?? new CaptchaService();
+            sessionService = DependencyResolver.Current.GetService(typeof(ISessionService)) as ISessionService ?? new SessionService();
         }
 
         [HttpGet]
         public void Image()
         {
-            var functionName = HttpContext.Request.QueryString[Configuration.CaptchaFunctionName];
-            var sessionKey = sessionService.GetSessionKey(functionName);
-            var captchaSession = (CaptchaSession)Session[sessionKey];
-            if(captchaSession == null)
+            var captchaSession = sessionService.Get();
+            if (captchaSession == null)
             {
-                var captchaSetting = new CaptchaSetting
-                {
-                    Level = CaptchaLevels.Extreme
-                };
-                captchaSession = sessionService.Create(captchaSetting);
+                captchaSession = sessionService.Create();
             }
             else
             {
@@ -50,34 +37,24 @@
                     var captchaSetting = new CaptchaSetting
                     {
                         FunctionName = captchaSession.FunctionName,
-                        Level = captchaSession.Level
+                        CaptchaLevel = captchaSession.CaptchaLevel
                     };
                     captchaSession = sessionService.Create(captchaSetting);
                 }
             }
-            
-            var captchaImage = captchaService.Generate(captchaSession.Text, captchaSession.Level);
+
+            var captchaImage = captchaService.Generate(captchaSession.Text, captchaSession.CaptchaLevel);
             WriteToResponse(Response, captchaImage);
             Response.Cache.SetNoServerCaching();
             Response.Cache.SetNoStore();
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
         }
 
-        private CaptchaSession GenerateNewCaptchaSession(string functionName, CaptchaLevels level)
-        {
-            var captchaText = captchaService.RandomText(CaptchaProfiles.DefaultTextOptions);
-            return new CaptchaSession(functionName, captchaText, level);
-        }
-
         [HttpGet]
         [OutputCache(Duration = int.MaxValue)]
         public ActionResult Stylesheet()
         {
-#if DEBUG
-            return Content(string.Empty, "text/css");
-#else
             return Content(stylesheetResource, "text/css");
-#endif
         }
 
         [HttpGet]
@@ -86,11 +63,7 @@
         {
             return new JavaScriptResult
             {
-#if DEBUG
-                Script = string.Empty
-#else
                 Script = scriptResource
-#endif
             };
         }
 

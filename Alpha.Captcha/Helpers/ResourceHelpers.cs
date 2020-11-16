@@ -1,6 +1,5 @@
 ﻿namespace Alpha.Captcha.Helpers
 {
-    using System.Drawing;
     using System.IO;
 
     internal static class ResourceHelpers

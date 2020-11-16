@@ -2,7 +2,7 @@
 {
     using System.Drawing;
 
-    public class CaptchaProfiles
+    public static class CaptchaProfiles
     {
         private static readonly int DefaultWidth = 250;
         private static readonly int DefaultHeight = 50;
@@ -32,54 +32,54 @@
             "verdana"
         };
 
-        public static CaptchaTextOptions DefaultTextOptions = new CaptchaTextOptions(DefaultTextLength, DefaultChars);
+        public static readonly CaptchaTextOptions DefaultTextOptions = new CaptchaTextOptions(DefaultTextLength, DefaultChars);
 
-        public static CaptchaImageOptions Low = new CaptchaImageOptions(
+        public static readonly CaptchaImageOptions Low = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
             DefaultLineColor,
-            FontWarpFactor.Low,
-            BackgroundNoiseLevel.Low,
-            LineNoiseLevel.Low,
+            FontWarpFactors.Low,
+            BackgroundNoiseLevels.Low,
+            LineNoiseLevels.Low,
             DefaultFonts);
 
-        public static CaptchaImageOptions Medium = new CaptchaImageOptions(
+        public static readonly CaptchaImageOptions Medium = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
             DefaultLineColor,
-            FontWarpFactor.Medium,
-            BackgroundNoiseLevel.Medium,
-            LineNoiseLevel.Medium,
+            FontWarpFactors.Medium,
+            BackgroundNoiseLevels.Medium,
+            LineNoiseLevels.Medium,
             DefaultFonts);
 
-        public static CaptchaImageOptions High = new CaptchaImageOptions(
+        public static readonly CaptchaImageOptions High = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
             DefaultLineColor,
-            FontWarpFactor.High,
-            BackgroundNoiseLevel.High,
-            LineNoiseLevel.High,
+            FontWarpFactors.High,
+            BackgroundNoiseLevels.High,
+            LineNoiseLevels.High,
             DefaultFonts);
 
-        public static CaptchaImageOptions Extreme = new CaptchaImageOptions(
+        public static readonly CaptchaImageOptions Extreme = new CaptchaImageOptions(
             DefaultWidth,
             DefaultHeight,
             DefaultBackColor,
             DefaultFontColor,
             DefaultNoiseColor,
             DefaultLineColor,
-            FontWarpFactor.Extreme,
-            BackgroundNoiseLevel.Extreme,
-            LineNoiseLevel.Extreme,
+            FontWarpFactors.Extreme,
+            BackgroundNoiseLevels.Extreme,
+            LineNoiseLevels.Extreme,
             DefaultFonts);
     }
 }

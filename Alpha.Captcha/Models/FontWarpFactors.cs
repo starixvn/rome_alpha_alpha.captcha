@@ -1,6 +1,6 @@
 ﻿namespace Alpha.Captcha.Models
 {
-    public enum FontWarpFactor
+    public enum FontWarpFactors
     {
         None,
         Low,

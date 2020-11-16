@@ -1,49 +1,19 @@
 ﻿@using Alpha.Captcha
-@using System.Threading
-@{
-    var isDevelopment = (bool)ViewData["IsDevelopment"];
-    var lang = Thread.CurrentThread.CurrentUICulture.Name;
-    var selectList = new List<SelectListItem>
-{
-new SelectListItem
-{
-    Text = "English",
-    Value = "en-US"
-},
-new SelectListItem
-{
-    Text = "Thailand",
-    Value = "th-TH"
-},
-new SelectListItem
-{
-    Text = "Vietnam",
-    Value = "vi-VN"
-}
-};
-    selectList.ForEach(item => item.Selected = item.Value == lang);
-}
+@using Alpha.Captcha.Mvc
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-    @if (isDevelopment)
-    {
-        <link href="~/Resources/captcha.css" rel="stylesheet" />
-    }
-    else
-    {
-        <link href="@Configuration.CaptchaStylesheet" rel="stylesheet" />
-    }
+    @Html.Stylesheet()
     @RenderSection("styles", required: false)
 </head>
 <body>
     <div class="container body-content">
         <div>
             Select language:
-            @Html.DropDownList("language", selectList)
+            @Html.DropDownList("language", (List<SelectListItem>)ViewBag.Langs)
         </div>
         <br />
         @RenderBody()
@@ -62,10 +32,6 @@ new SelectListItem
             }
         });
     </script>
-    @if (isDevelopment)
-    {
-        <script src="~/Resources/captcha.js"></script>
-    }
     @RenderSection("scripts", required: false)
 </body>
 </html>

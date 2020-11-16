@@ -1,43 +1,90 @@
 ﻿namespace Alpha.Captcha.Services
 {
-    using Alpha.Captcha.Models;
     using System.Web;
+    using System.Web.Mvc;
+    using Alpha.Captcha.Models;
 
     public interface ISessionService
     {
-        CaptchaSession Create(CaptchaSetting setting);
+        CaptchaSession Create(CaptchaSetting captchaSetting);
 
-        string GetSessionKey(string functionName);
+        CaptchaSession Create();
+
+        CaptchaSession Get();
+
+        CaptchaSession Take();
+
+        void Remove();
     }
 
     public class SessionService : ISessionService
     {
         private static readonly string CaptchaSessionKey = "Alpha.Captcha";
-        private readonly ICaptchaService captchaService;
+        private readonly IRandomService randomService;
 
-        public SessionService(ICaptchaService captchaService)
+        public SessionService()
         {
-            this.captchaService = captchaService;
+            randomService = DependencyResolver.Current.GetService(typeof(IRandomService)) as IRandomService ?? new RandomService();
         }
 
-        public string GetSessionKey(string functionName)
+        public CaptchaSession Create(CaptchaSetting captchaSetting)
         {
-            if (string.IsNullOrEmpty(functionName))
-            {
-                return CaptchaSessionKey;
-            }
-
-            return $"{CaptchaSessionKey}_{functionName.ToLowerInvariant()}";
-        }
-
-        public CaptchaSession Create(CaptchaSetting setting)
-        {
-            var session = HttpContext.Current.Session;
-            var captchaText = captchaService.RandomText(CaptchaProfiles.DefaultTextOptions);
-            var captchaSession = new CaptchaSession(setting.FunctionName, captchaText, setting.Level);
-            var sessionKey = GetSessionKey(setting.FunctionName);
-            session[sessionKey] = captchaSession;
+            var httpContext = HttpContext.Current;
+            var captchaText = randomService.RandomText(CaptchaProfiles.DefaultTextOptions);
+            var captchaSession = new CaptchaSession(captchaSetting.FunctionName, captchaText, captchaSetting.CaptchaLevel);
+            var sessionKey = GetSessionKey(captchaSetting.FunctionName);
+            httpContext.Session[sessionKey] = captchaSession;
             return captchaSession;
+        }
+
+        public CaptchaSession Create()
+        {
+            var httpContext = HttpContext.Current;
+            var functionName = GetFunctionName(httpContext.Request);
+            var captchaSetting = new CaptchaSetting
+            {
+                FunctionName = functionName
+            };
+            return Create(captchaSetting);
+        }
+
+        public CaptchaSession Get()
+        {
+            var httpContext = HttpContext.Current;
+            var sessionKey = GetSessionKey(httpContext.Request);
+            return (CaptchaSession)httpContext.Session[sessionKey];
+        }
+
+        public CaptchaSession Take()
+        {
+            var httpContext = HttpContext.Current;
+            var sessionKey = GetSessionKey(httpContext.Request);
+            var captchaSession = (CaptchaSession)httpContext.Session[sessionKey];
+            httpContext.Session[sessionKey] = null;
+            return captchaSession;
+        }
+
+        public void Remove()
+        {
+            var httpContext = HttpContext.Current;
+            var sessionKey = GetSessionKey(httpContext.Request);
+            httpContext.Session[sessionKey] = null;
+        }
+
+        private static string GetFunctionName(HttpRequest httpRequest)
+        {
+            return httpRequest.QueryString[Configuration.CaptchaFunctionName] ?? httpRequest.Form[Configuration.CaptchaFunctionName];
+        }
+
+        private static string GetSessionKey(HttpRequest httpRequest)
+        {
+            var functionName = GetFunctionName(httpRequest);
+            return GetSessionKey(functionName);
+        }
+
+        private static string GetSessionKey(string functionName)
+        {
+            return string.IsNullOrEmpty(functionName) ? CaptchaSessionKey : $"{CaptchaSessionKey}_{functionName.ToLowerInvariant()}";
         }
     }
 }

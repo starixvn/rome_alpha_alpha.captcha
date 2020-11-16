@@ -1,45 +1,31 @@
 ﻿namespace Alpha.Captcha.Services
 {
-    using Alpha.Captcha.Models;
     using System;
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
-    using System.Text;
+    using System.Web.Mvc;
+    using Alpha.Captcha.Models;
 
     public interface ICaptchaService
     {
         Image Generate(string captchaText, CaptchaImageOptions captchaImageOptions);
 
         Image Generate(string captchaText, CaptchaLevels captchaLevel);
-
-        string RandomText(CaptchaTextOptions captchaTextOptions);
     }
 
     public class CaptchaService : ICaptchaService
     {
-        private readonly Random random;
+        private readonly IRandomService randomService;
 
-        public CaptchaService(Random random)
+        public CaptchaService()
         {
-            this.random = random;
+            randomService = DependencyResolver.Current.GetService(typeof(IRandomService)) as IRandomService ?? new RandomService();
         }
 
-        public string RandomText(CaptchaTextOptions captchaTextOptions)
+        private static CaptchaImageOptions GetCaptchaImageOptions(CaptchaLevels captchaLevel)
         {
-            var sb = new StringBuilder(captchaTextOptions.TextLength);
-            var maxLength = captchaTextOptions.Chars.Length;
-            for (var i = 0; i < captchaTextOptions.TextLength; i++)
-            {
-                sb.Append(captchaTextOptions.Chars[random.Next(maxLength)]);
-            }
-
-            return sb.ToString();
-        }
-
-        private static CaptchaImageOptions GetCaptchaImageOptions(CaptchaLevels level)
-        {
-            switch (level)
+            switch (captchaLevel)
             {
                 case CaptchaLevels.Low:
                     return CaptchaProfiles.Low;
@@ -50,39 +36,39 @@
                 case CaptchaLevels.Extreme:
                     return CaptchaProfiles.Extreme;
                 default:
-                    throw new NotImplementedException(nameof(level));
+                    throw new NotImplementedException(nameof(captchaLevel));
             }
         }
 
-        public Image Generate(string captchaText, CaptchaLevels level)
+        public Image Generate(string captchaText, CaptchaLevels captchaLevel)
         {
-            return Generate(captchaText, GetCaptchaImageOptions(level));
+            return Generate(captchaText, GetCaptchaImageOptions(captchaLevel));
         }
 
-        public Image Generate(string captchaText, CaptchaImageOptions captchaOptions)
+        public Image Generate(string captchaText, CaptchaImageOptions captchaImageOptions)
         {
-            var captchaImage = new Bitmap(captchaOptions.Width, captchaOptions.Height, PixelFormat.Format24bppRgb);
+            var captchaImage = new Bitmap(captchaImageOptions.Width, captchaImageOptions.Height, PixelFormat.Format24bppRgb);
             using (var gr = Graphics.FromImage(captchaImage))
             {
                 gr.SmoothingMode = SmoothingMode.AntiAlias;
-                var rect = new Rectangle(0, 0, captchaOptions.Width, captchaOptions.Height);
-                using (var br = new SolidBrush(captchaOptions.BackColor))
+                var rect = new Rectangle(0, 0, captchaImageOptions.Width, captchaImageOptions.Height);
+                using (var br = new SolidBrush(captchaImageOptions.BackColor))
                 {
                     gr.FillRectangle(br, rect);
                 }
 
                 var charOffset = 0;
-                var charWidth = captchaOptions.Width / captchaText.Length;
-                using (var br = new SolidBrush(captchaOptions.FontColor))
+                var charWidth = captchaImageOptions.Width / captchaText.Length;
+                using (var br = new SolidBrush(captchaImageOptions.FontColor))
                 {
                     foreach (var c in captchaText)
                     {
-                        using (var fnt = GetFont(captchaOptions))
+                        using (var fnt = GetFont(captchaImageOptions))
                         {
-                            var rectChar = new Rectangle(Convert.ToInt32(charOffset * charWidth), 0, Convert.ToInt32(charWidth), captchaOptions.Height);
+                            var rectChar = new Rectangle(Convert.ToInt32(charOffset * charWidth), 0, Convert.ToInt32(charWidth), captchaImageOptions.Height);
                             using (var graphics = TextPath(c.ToString(), fnt, rectChar))
                             {
-                                WarpText(captchaOptions, graphics, rectChar);
+                                WarpText(captchaImageOptions, graphics, rectChar);
                                 gr.FillPath(br, graphics);
                             }
                         }
@@ -90,8 +76,8 @@
                     }
                 }
 
-                AddNoise(captchaOptions, gr, rect);
-                AddLine(captchaOptions, gr, rect);
+                AddNoise(captchaImageOptions, gr, rect);
+                AddLine(captchaImageOptions, gr, rect);
             }
 
             return captchaImage;
@@ -99,7 +85,7 @@
 
         private string RandomFontFamily(CaptchaImageOptions captchaOptions)
         {
-            return captchaOptions.Fonts[random.Next(0, captchaOptions.Fonts.Length)];
+            return captchaOptions.Fonts[randomService.Next(captchaOptions.Fonts.Length)];
         }
 
         private PointF RandomPoint(Rectangle rect)
@@ -109,7 +95,7 @@
 
         private PointF RandomPoint(int xmin, int xmax, int ymin, int ymax)
         {
-            return new PointF(random.Next(xmin, xmax), random.Next(ymin, ymax));
+            return new PointF(randomService.Next(xmin, xmax), randomService.Next(ymin, ymax));
         }
 
         private GraphicsPath TextPath(string s, Font f, Rectangle r)
@@ -130,19 +116,19 @@
             var density = 0f;
             switch (captchaOptions.FontWarp)
             {
-                case FontWarpFactor.None:
+                case FontWarpFactors.None:
                     density = 0.7f;
                     break;
-                case FontWarpFactor.Low:
+                case FontWarpFactors.Low:
                     density = 0.8f;
                     break;
-                case FontWarpFactor.Medium:
+                case FontWarpFactors.Medium:
                     density = 0.85f;
                     break;
-                case FontWarpFactor.High:
+                case FontWarpFactors.High:
                     density = 0.9f;
                     break;
-                case FontWarpFactor.Extreme:
+                case FontWarpFactors.Extreme:
                     density = 0.95f;
                     break;
             }
@@ -158,21 +144,21 @@
             float RangeModifier = 1.0f;
             switch (captchaOptions.FontWarp)
             {
-                case FontWarpFactor.None:
+                case FontWarpFactors.None:
                     return;
-                case FontWarpFactor.Low:
+                case FontWarpFactors.Low:
                     WarpDivisor = 6;
                     RangeModifier = 1;
                     break;
-                case FontWarpFactor.Medium:
+                case FontWarpFactors.Medium:
                     WarpDivisor = 5;
                     RangeModifier = 1.3f;
                     break;
-                case FontWarpFactor.High:
+                case FontWarpFactors.High:
                     WarpDivisor = 4.5f;
                     RangeModifier = 1.4f;
                     break;
-                case FontWarpFactor.Extreme:
+                case FontWarpFactors.Extreme:
                     WarpDivisor = 4;
                     RangeModifier = 1.5f;
                     break;
@@ -201,21 +187,21 @@
             int size = 0;
             switch (captchaOptions.BackgroundNoise)
             {
-                case BackgroundNoiseLevel.None:
+                case BackgroundNoiseLevels.None:
                     return;
-                case BackgroundNoiseLevel.Low:
+                case BackgroundNoiseLevels.Low:
                     density = 30;
                     size = 40;
                     break;
-                case BackgroundNoiseLevel.Medium:
+                case BackgroundNoiseLevels.Medium:
                     density = 18;
                     size = 40;
                     break;
-                case BackgroundNoiseLevel.High:
+                case BackgroundNoiseLevels.High:
                     density = 16;
                     size = 39;
                     break;
-                case BackgroundNoiseLevel.Extreme:
+                case BackgroundNoiseLevels.Extreme:
                     density = 12;
                     size = 38;
                     break;
@@ -226,7 +212,7 @@
                 var max = Convert.ToInt32(Math.Max(rect.Width, rect.Height) / size);
                 for (var i = 0; i <= Convert.ToInt32((rect.Width * rect.Height) / density); i++)
                 {
-                    graphics.FillEllipse(br, random.Next(rect.Width), random.Next(rect.Height), random.Next(max), random.Next(max));
+                    graphics.FillEllipse(br, randomService.Next(rect.Width), randomService.Next(rect.Height), randomService.Next(max), randomService.Next(max));
                 }
             }
         }
@@ -238,27 +224,27 @@
             int linecount = 0;
             switch (captchaOptions.LineNoise)
             {
-                case LineNoiseLevel.None:
-                    return;
-                case LineNoiseLevel.Low:
+                case LineNoiseLevels.None:
+                    break;
+                case LineNoiseLevels.Low:
                     length = 4;
                     width = Convert.ToSingle(captchaOptions.Height / 31.25);
                     // 1.6
                     linecount = 1;
                     break;
-                case LineNoiseLevel.Medium:
+                case LineNoiseLevels.Medium:
                     length = 5;
                     width = Convert.ToSingle(captchaOptions.Height / 27.7777);
                     // 1.8
                     linecount = 1;
                     break;
-                case LineNoiseLevel.High:
+                case LineNoiseLevels.High:
                     length = 3;
                     width = Convert.ToSingle(captchaOptions.Height / 25);
                     // 2.0
                     linecount = 2;
                     break;
-                case LineNoiseLevel.Extreme:
+                case LineNoiseLevels.Extreme:
                     length = 3;
                     width = Convert.ToSingle(captchaOptions.Height / 22.7272);
                     // 2.2
