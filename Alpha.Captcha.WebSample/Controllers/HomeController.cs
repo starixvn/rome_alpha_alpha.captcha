@@ -15,7 +15,11 @@
         private readonly CaptchaSetting indexCaptchaSetting = new CaptchaSetting
         {
             CaptchaLevel = CaptchaLevels.Low,
-            ButtonClassname = "btn-submit"
+            ButtonClassname = "btn-submit",
+            HiddenProps = new Dictionary<string, string>
+            {
+                ["test"] = "123"
+            }
         };
         private readonly CaptchaSetting feedbackCaptchaSetting = new CaptchaSetting
         {

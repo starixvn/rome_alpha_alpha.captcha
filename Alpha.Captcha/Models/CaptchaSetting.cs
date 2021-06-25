@@ -1,10 +1,14 @@
-﻿namespace Alpha.Captcha.Models
+﻿using System.Collections.Generic;
+
+namespace Alpha.Captcha.Models
 {
     public class CaptchaSetting
     {
         public string FunctionName { get; set; }
 
         public CaptchaLevels CaptchaLevel { get; set; } = CaptchaLevels.Extreme;
+
+        public IDictionary<string, string> HiddenProps { get; set; }
 
         /// <summary>
         /// render captcha as a form control
