@@ -19,6 +19,16 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     if (captchaContainer.tagName.toUpperCase() === 'FORM') {
         var captchaForm_1 = captchaContainer;
+        var updateSubmitStatus_1 = function (disabled) {
+            var elements = captchaForm_1.elements;
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                var element = elements[i];
+                if (element.type === 'submit') {
+                    element.disabled = disabled;
+                }
+            }
+        };
+        updateSubmitStatus_1(false);
         captchaForm_1.addEventListener('submit', function (e) {
             if (submitted) {
                 e.preventDefault();
@@ -33,13 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
             submitted = true;
             captchaInput.classList.remove('invalid');
-            var elements = captchaForm_1.elements;
-            for (var i = 0, len = elements.length; i < len; ++i) {
-                var element = elements[i];
-                if (element.type === 'submit') {
-                    element.disabled = true;
-                }
-            }
+            updateSubmitStatus_1(true);
         });
     }
 });

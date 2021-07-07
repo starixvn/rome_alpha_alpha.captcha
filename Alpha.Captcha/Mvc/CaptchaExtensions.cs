@@ -32,6 +32,7 @@
             if (captchaSetting.IsForm)
             {
                 container.MergeAttribute("method", "post");
+                container.MergeAttribute("autocomplete", "off");
             }
 
             html.Append(container.ToString(TagRenderMode.StartTag));
@@ -133,6 +134,7 @@
             var html = new StringBuilder();
             var inputBuilder = new TagBuilder("input");
             inputBuilder.MergeAttribute("type", "submit");
+            inputBuilder.MergeAttribute("disabled", "disabled");
             inputBuilder.MergeAttribute("class", "captcha-button " + classname);
             inputBuilder.MergeAttribute("value", Lang.ButtonText);
             html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));

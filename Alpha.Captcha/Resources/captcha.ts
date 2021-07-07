@@ -23,6 +23,19 @@
 
     if (captchaContainer.tagName.toUpperCase() === 'FORM') {
         const captchaForm = captchaContainer as HTMLFormElement;
+
+        const updateSubmitStatus = (disabled) => {
+            const elements = captchaForm.elements;
+            for (let i = 0, len = elements.length; i < len; ++i) {
+                const element = elements[i] as any;
+                if (element.type === 'submit') {
+                    element.disabled = disabled;
+                }
+            }
+        }
+
+        updateSubmitStatus(false);
+
         captchaForm.addEventListener('submit', e => {
             if (submitted) {
                 e.preventDefault();
@@ -40,13 +53,7 @@
 
             submitted = true;
             captchaInput.classList.remove('invalid');
-            const elements = captchaForm.elements;
-            for (let i = 0, len = elements.length; i < len; ++i) {
-                const element = elements[i] as any;
-                if (element.type === 'submit') {
-                    element.disabled = true;
-                }
-            }
+            updateSubmitStatus(true);
         });
     }
 });
