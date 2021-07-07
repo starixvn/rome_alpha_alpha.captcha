@@ -16,7 +16,7 @@
         }
 
         captchaInput.value = '';
-        captchaInput.classList.remove('invalid');
+        captchaInput.dispatchEvent(new Event('input', { bubbles: true }));
         const newCaptchaImageSrc = `${captchaImageSrc}${captchaImageSrc.indexOf('?') === -1 ? '?' : '&'}t=${Date.now()}`;
         captchaImage.setAttribute('src', newCaptchaImageSrc);
     });
@@ -34,7 +34,9 @@
             }
         }
 
-        updateSubmitStatus(false);
+        captchaInput.addEventListener('input', () => {
+            updateSubmitStatus(captchaInput.value === '');
+        });
 
         captchaForm.addEventListener('submit', e => {
             if (submitted) {
@@ -42,17 +44,7 @@
                 return;
             }
 
-            if (!captchaInput.value) {
-                e.preventDefault();
-                if (!captchaInput.classList.contains('invalid')) {
-                    captchaInput.classList.add('invalid');
-                }
-
-                return;
-            }
-
             submitted = true;
-            captchaInput.classList.remove('invalid');
             updateSubmitStatus(true);
         });
     }

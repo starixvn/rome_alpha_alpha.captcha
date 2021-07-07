@@ -69,6 +69,7 @@
             inputBuilder.MergeAttribute("class", "captcha-input");
             inputBuilder.MergeAttribute("name", Configuration.CaptchaInputName);
             inputBuilder.MergeAttribute("autocomplete", "off");
+            inputBuilder.MergeAttribute("required", "required");
             html.Append(row.ToString(TagRenderMode.StartTag));
             html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
             html.Append(row.ToString(TagRenderMode.EndTag));

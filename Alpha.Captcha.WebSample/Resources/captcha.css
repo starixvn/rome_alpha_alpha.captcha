@@ -22,8 +22,6 @@
     padding: 5px;
     text-transform: uppercase;
     border: 1px solid #ced4da; }
-    .captcha-container .captcha-row.row-input .captcha-input.invalid {
-      border-color: #dc3545; }
     .captcha-container .captcha-row.row-input .captcha-input::-webkit-input-placeholder {
       /* Edge */
       text-transform: none; }

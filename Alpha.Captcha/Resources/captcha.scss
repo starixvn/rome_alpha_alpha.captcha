@@ -38,10 +38,6 @@
                 text-transform: uppercase;
                 border: 1px solid #ced4da;
 
-                &.invalid {
-                    border-color: #dc3545;
-                }
-
                 &::-webkit-input-placeholder { /* Edge */
                     text-transform: none;
                 }
