@@ -31,16 +31,16 @@
                 return;
             }
 
-            var captchaSession = sessionService.Get();
-            if (captchaSession == null)
+            var captchaModel = sessionService.Get();
+            if (captchaModel == null)
             {
                 CaptchaValidationFailed(filterContext, 2, Lang.CaptchaIsNullErrorMessage);
                 return;
             }
 
-            if (!inputCaptcha.Equals(captchaSession.Text, StringComparison.OrdinalIgnoreCase))
+            if (!inputCaptcha.Equals(captchaModel.Text, StringComparison.OrdinalIgnoreCase))
             {
-                CaptchaValidationFailed(filterContext, 3, string.Format(Lang.ValidateErrorMessage, inputCaptcha.ToUpperInvariant(), captchaSession.Text));
+                CaptchaValidationFailed(filterContext, 3, string.Format(Lang.ValidateErrorMessage, inputCaptcha.ToUpperInvariant(), captchaModel.Text));
                 return;
             }
 

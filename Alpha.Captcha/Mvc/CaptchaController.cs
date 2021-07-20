@@ -5,7 +5,6 @@
     using System.Web;
     using System.Web.Mvc;
     using Alpha.Captcha.Helpers;
-    using Alpha.Captcha.Models;
     using Alpha.Captcha.Services;
 
     public class CaptchaController : Controller
@@ -24,26 +23,21 @@
         [HttpGet]
         public void Image()
         {
-            var captchaSession = sessionService.Get();
-            if (captchaSession == null)
+            var captchaModel = sessionService.Get();
+            if (captchaModel == null)
             {
-                captchaSession = sessionService.Create();
+                captchaModel = sessionService.Create();
             }
             else
             {
                 var isRefresh = !string.IsNullOrEmpty(HttpContext.Request.QueryString["t"]);
-                if (isRefresh)
+                if (isRefresh || string.IsNullOrWhiteSpace(captchaModel.Text))
                 {
-                    var captchaSetting = new CaptchaSetting
-                    {
-                        FunctionName = captchaSession.FunctionName,
-                        CaptchaLevel = captchaSession.CaptchaLevel
-                    };
-                    captchaSession = sessionService.Create(captchaSetting);
+                    captchaModel = sessionService.Create(captchaModel.Setting);
                 }
             }
 
-            var captchaImage = captchaService.Generate(captchaSession.Text, captchaSession.CaptchaLevel);
+            var captchaImage = captchaService.Generate(captchaModel.Text, captchaModel.Setting.Level);
             WriteToResponse(Response, captchaImage);
             Response.Cache.SetNoServerCaching();
             Response.Cache.SetNoStore();

@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Alpha.Captcha.Models
 {
+    [Serializable]
     public class CaptchaSetting
     {
         public string FunctionName { get; set; }
 
-        public CaptchaLevels CaptchaLevel { get; set; } = CaptchaLevels.Extreme;
+        public CaptchaLevels Level { get; set; } = CaptchaLevels.Extreme;
 
         public IDictionary<string, string> HiddenProps { get; set; }
 

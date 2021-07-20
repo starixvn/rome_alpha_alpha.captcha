@@ -6,20 +6,22 @@
 
     public interface ISessionService
     {
-        CaptchaSession Create(CaptchaSetting captchaSetting);
+        CaptchaModel Create(CaptchaSetting setting);
 
-        CaptchaSession Create();
+        CaptchaModel Create();
 
-        CaptchaSession Get();
+        CaptchaModel Get();
 
-        CaptchaSession Take();
+        string Take();
 
         void Remove();
     }
 
     public class SessionService : ISessionService
     {
-        private static readonly string CaptchaSessionKey = "Alpha.Captcha";
+        private static readonly string SessionKeyPrefix = "Alpha.Captcha";
+        private static readonly string SessionKeySettingSuffix = "Setting";
+        private static readonly string SessionKeyTextSuffix = "Text";
         private readonly IRandomService randomService;
 
         public SessionService()
@@ -27,17 +29,18 @@
             randomService = DependencyResolver.Current.GetService(typeof(IRandomService)) as IRandomService ?? new RandomService();
         }
 
-        public CaptchaSession Create(CaptchaSetting captchaSetting)
+        public CaptchaModel Create(CaptchaSetting setting)
         {
+            var text = randomService.RandomText(CaptchaProfiles.DefaultTextOptions);
+            var captchaModel = new CaptchaModel(setting, text);
             var httpContext = HttpContext.Current;
-            var captchaText = randomService.RandomText(CaptchaProfiles.DefaultTextOptions);
-            var captchaSession = new CaptchaSession(captchaSetting.FunctionName, captchaText, captchaSetting.CaptchaLevel);
-            var sessionKey = GetSessionKey(captchaSetting.FunctionName);
-            httpContext.Session[sessionKey] = captchaSession;
-            return captchaSession;
+            var sessionKey = GetSessionKey(captchaModel.Setting.FunctionName);
+            httpContext.Session[sessionKey.Setting] = captchaModel.Setting;
+            httpContext.Session[sessionKey.Text] = captchaModel.Text;
+            return captchaModel;
         }
 
-        public CaptchaSession Create()
+        public CaptchaModel Create()
         {
             var httpContext = HttpContext.Current;
             var functionName = GetFunctionName(httpContext.Request);
@@ -48,27 +51,29 @@
             return Create(captchaSetting);
         }
 
-        public CaptchaSession Get()
+        public CaptchaModel Get()
         {
             var httpContext = HttpContext.Current;
             var sessionKey = GetSessionKey(httpContext.Request);
-            return (CaptchaSession)httpContext.Session[sessionKey];
+            var setting = (CaptchaSetting)httpContext.Session[sessionKey.Setting];
+            var text = (string)httpContext.Session[sessionKey.Text];
+            return new CaptchaModel(setting, text);
         }
 
-        public CaptchaSession Take()
+        public string Take()
         {
             var httpContext = HttpContext.Current;
             var sessionKey = GetSessionKey(httpContext.Request);
-            var captchaSession = (CaptchaSession)httpContext.Session[sessionKey];
-            httpContext.Session[sessionKey] = null;
-            return captchaSession;
+            var captchaText = (string)httpContext.Session[sessionKey.Text];
+            httpContext.Session[sessionKey.Text] = null;
+            return captchaText;
         }
 
         public void Remove()
         {
             var httpContext = HttpContext.Current;
             var sessionKey = GetSessionKey(httpContext.Request);
-            httpContext.Session[sessionKey] = null;
+            httpContext.Session[sessionKey.Text] = null;
         }
 
         private static string GetFunctionName(HttpRequest httpRequest)
@@ -76,15 +81,16 @@
             return httpRequest.QueryString[Configuration.CaptchaFunctionName] ?? httpRequest.Form[Configuration.CaptchaFunctionName];
         }
 
-        private static string GetSessionKey(HttpRequest httpRequest)
+        private static SessionKey GetSessionKey(HttpRequest httpRequest)
         {
             var functionName = GetFunctionName(httpRequest);
             return GetSessionKey(functionName);
         }
 
-        private static string GetSessionKey(string functionName)
+        private static SessionKey GetSessionKey(string functionName)
         {
-            return string.IsNullOrEmpty(functionName) ? CaptchaSessionKey : $"{CaptchaSessionKey}_{functionName.ToLowerInvariant()}";
+            var sessionKeyPrefix = string.IsNullOrEmpty(functionName) ? SessionKeyPrefix : $"{SessionKeyPrefix}_{functionName.ToLowerInvariant()}";
+            return new SessionKey($"{sessionKeyPrefix}_{SessionKeySettingSuffix}", $"{sessionKeyPrefix}_{SessionKeyTextSuffix}");
         }
     }
 }

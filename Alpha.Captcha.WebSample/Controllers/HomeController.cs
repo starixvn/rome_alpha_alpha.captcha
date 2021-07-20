@@ -14,7 +14,7 @@
         private readonly ISessionService sessionService;
         private readonly CaptchaSetting indexCaptchaSetting = new CaptchaSetting
         {
-            CaptchaLevel = CaptchaLevels.Low,
+            Level = CaptchaLevels.Low,
             ButtonClassname = "btn-submit",
             HiddenProps = new Dictionary<string, string>
             {
@@ -24,14 +24,14 @@
         private readonly CaptchaSetting feedbackCaptchaSetting = new CaptchaSetting
         {
             FunctionName = "high",
-            CaptchaLevel = CaptchaLevels.High,
+            Level = CaptchaLevels.High,
             IsForm = false,
             IsShowButton = false
         };
         private readonly CaptchaSetting ajaxCaptchaSetting = new CaptchaSetting
         {
             FunctionName = "ajax",
-            CaptchaLevel = CaptchaLevels.Low,
+            Level = CaptchaLevels.Low,
             IsForm = false
         };
 
