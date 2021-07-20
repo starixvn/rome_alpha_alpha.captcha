@@ -120,7 +120,4 @@
   <data name="IamNotARobot" xml:space="preserve">
     <value>我不是机器人</value>
   </data>
-  <data name="ValidateErrorMessage" xml:space="preserve">
-    <value>識別碼錯誤</value>
-  </data>
 </root>
