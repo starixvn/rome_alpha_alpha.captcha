@@ -13,7 +13,7 @@
     <PackageTags>mvc captcha</PackageTags>
     <Authors>Starixsoft</Authors>
     <NeutralLanguage>en-US</NeutralLanguage>
-    <Version>1.1.1.2-beta13</Version>
+    <Version>1.1.1.2</Version>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
