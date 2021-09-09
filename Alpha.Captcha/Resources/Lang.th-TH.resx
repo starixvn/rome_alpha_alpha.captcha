@@ -117,7 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CaptchaIsEmptyErrorMessage" xml:space="preserve">
+    <value>คุณยังไม่ได้ใส่ CAPTCHA</value>
+  </data>
+  <data name="CaptchaIsNullErrorMessage" xml:space="preserve">
+    <value>ด้วยเหตุผลบางประการ ระบบไม่สามารถตรวจสอบ CAPTCHA ได้</value>
+  </data>
   <data name="IamNotARobot" xml:space="preserve">
     <value>ฉันไม่ใช่หุ่นยนต์</value>
+  </data>
+  <data name="ValidateErrorMessage" xml:space="preserve">
+    <value>รหัส "{0}" ที่คุณใส่ไม่ถูกต้อง (เมื่อเทียบกับ "{1}")</value>
   </data>
 </root>

@@ -117,7 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="CaptchaIsEmptyErrorMessage" xml:space="preserve">
+    <value>Bạn chưa nhập Captcha</value>
+  </data>
+  <data name="CaptchaIsNullErrorMessage" xml:space="preserve">
+    <value>Hệ thống không thể xác thực Captcha do lỗi không mong muốn</value>
+  </data>
   <data name="IamNotARobot" xml:space="preserve">
     <value>Tôi không phải là người máy</value>
+  </data>
+  <data name="ValidateErrorMessage" xml:space="preserve">
+    <value>Bạn nhập mã "{0}" không chính xác (so với "{1}")</value>
   </data>
 </root>
