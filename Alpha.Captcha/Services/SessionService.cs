@@ -56,6 +56,15 @@
             var httpContext = HttpContext.Current;
             var sessionKey = GetSessionKey(httpContext.Request);
             var setting = (CaptchaSetting)httpContext.Session[sessionKey.Setting];
+            if (setting == null)
+            {
+                setting = new CaptchaSetting
+                {
+                    FunctionName = GetFunctionName(httpContext.Request),
+                    Level = CaptchaLevels.Extreme
+                };
+            }
+
             var text = (string)httpContext.Session[sessionKey.Text];
             return new CaptchaModel(setting, text);
         }

@@ -24,17 +24,10 @@
         public void Image()
         {
             var captchaModel = sessionService.Get();
-            if (captchaModel == null)
+            var isRefresh = !string.IsNullOrEmpty(HttpContext.Request.QueryString["t"]);
+            if (isRefresh || string.IsNullOrWhiteSpace(captchaModel.Text))
             {
-                captchaModel = sessionService.Create();
-            }
-            else
-            {
-                var isRefresh = !string.IsNullOrEmpty(HttpContext.Request.QueryString["t"]);
-                if (isRefresh || string.IsNullOrWhiteSpace(captchaModel.Text))
-                {
-                    captchaModel = sessionService.Create(captchaModel.Setting);
-                }
+                captchaModel = sessionService.Create(captchaModel.Setting);
             }
 
             var captchaImage = captchaService.Generate(captchaModel.Text, captchaModel.Setting.Level);
