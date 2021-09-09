@@ -1,5 +1,6 @@
 ﻿namespace Alpha.Captcha.Mvc
 {
+    using System.Collections.Generic;
     using System.Text;
     using System.Web;
     using System.Web.Mvc;
@@ -31,6 +32,7 @@
             if (captchaSetting.IsForm)
             {
                 container.MergeAttribute("method", "post");
+                container.MergeAttribute("autocomplete", "off");
             }
 
             html.Append(container.ToString(TagRenderMode.StartTag));
@@ -42,6 +44,11 @@
             html.Append(CreateHintHtml());
             html.Append(CreateImageHtml(captchaSetting.FunctionName));
             html.Append(CreateInputHtml());
+            if (captchaSetting.HiddenProps != null)
+            {
+                html.Append(CreateHiddenHtml(captchaSetting.HiddenProps));
+            }
+
             if (captchaSetting.IsShowButton)
             {
                 html.Append(CreateButtonHtml(captchaSetting.ButtonClassname));
@@ -58,11 +65,30 @@
             var row = CreateRowTag("row-input");
 
             var inputBuilder = new TagBuilder("input");
+            inputBuilder.MergeAttribute("type", "text");
             inputBuilder.MergeAttribute("class", "captcha-input");
             inputBuilder.MergeAttribute("name", Configuration.CaptchaInputName);
+            inputBuilder.MergeAttribute("autocomplete", "off");
+            inputBuilder.MergeAttribute("required", "required");
             html.Append(row.ToString(TagRenderMode.StartTag));
             html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
             html.Append(row.ToString(TagRenderMode.EndTag));
+            return html.ToString();
+        }
+
+        private static string CreateHiddenHtml(IDictionary<string, string> hiddenProps)
+        {
+            var html = new StringBuilder();
+            foreach (var key in hiddenProps.Keys)
+            {
+                var value = hiddenProps[key];
+                var inputBuilder = new TagBuilder("input");
+                inputBuilder.MergeAttribute("type", "hidden");
+                inputBuilder.MergeAttribute("name", key);
+                inputBuilder.MergeAttribute("value", value);
+                html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
+            }
+
             return html.ToString();
         }
 
@@ -107,12 +133,12 @@
         private static string CreateButtonHtml(string classname)
         {
             var html = new StringBuilder();
-            var tag = new TagBuilder("button");
-            tag.MergeAttribute("type", "submit");
-            tag.MergeAttribute("class", "captcha-button " + classname);
-            html.Append(tag.ToString(TagRenderMode.StartTag));
-            html.Append(Lang.ButtonText);
-            html.Append(tag.ToString(TagRenderMode.EndTag));
+            var inputBuilder = new TagBuilder("input");
+            inputBuilder.MergeAttribute("type", "submit");
+            inputBuilder.MergeAttribute("disabled", "disabled");
+            inputBuilder.MergeAttribute("class", "captcha-button " + classname);
+            inputBuilder.MergeAttribute("value", Lang.ButtonText);
+            html.Append(inputBuilder.ToString(TagRenderMode.SelfClosing));
             return html.ToString();
         }
 

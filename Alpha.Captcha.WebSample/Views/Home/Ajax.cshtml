@@ -20,6 +20,7 @@
     <script type="text/javascript">
         document.addEventListener("DOMContentLoaded", () => {
             var btnSubmit = document.getElementsByClassName('captcha-button')[0];
+            btnSubmit.disabled = false;
             btnSubmit.addEventListener('click', function () {
                 var xmlHttp = new XMLHttpRequest();
                 xmlHttp.onreadystatechange = function () {

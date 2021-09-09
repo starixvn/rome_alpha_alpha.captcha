@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    var submitted = false;
     var captchaContainer = document.getElementsByClassName('captcha-container')[0];
     var captchaImage = captchaContainer.getElementsByClassName('captcha-image')[0];
     var captchaImageSrc = captchaImage.getAttribute('src');
@@ -8,23 +9,35 @@ document.addEventListener("DOMContentLoaded", function () {
         captchaInput.focus();
     });
     captchaRefreshIcon.addEventListener('click', function () {
+        if (submitted) {
+            return;
+        }
         captchaInput.value = '';
-        captchaInput.classList.remove('invalid');
+        captchaInput.dispatchEvent(new Event('input', { bubbles: true }));
         var newCaptchaImageSrc = "" + captchaImageSrc + (captchaImageSrc.indexOf('?') === -1 ? '?' : '&') + "t=" + Date.now();
         captchaImage.setAttribute('src', newCaptchaImageSrc);
     });
     if (captchaContainer.tagName.toUpperCase() === 'FORM') {
-        var captchaForm = captchaContainer;
-        captchaForm.addEventListener('submit', function (e) {
-            if (!captchaInput.value) {
-                e.preventDefault();
-                if (!captchaInput.classList.contains('invalid')) {
-                    captchaInput.classList.add('invalid');
+        var captchaForm_1 = captchaContainer;
+        var updateSubmitStatus_1 = function (disabled) {
+            var elements = captchaForm_1.elements;
+            for (var i = 0, len = elements.length; i < len; ++i) {
+                var element = elements[i];
+                if (element.type === 'submit') {
+                    element.disabled = disabled;
                 }
             }
-            else {
-                captchaInput.classList.remove('invalid');
+        };
+        captchaInput.addEventListener('input', function () {
+            updateSubmitStatus_1(captchaInput.value === '');
+        });
+        captchaForm_1.addEventListener('submit', function (e) {
+            if (submitted) {
+                e.preventDefault();
+                return;
             }
+            submitted = true;
+            updateSubmitStatus_1(true);
         });
     }
 });

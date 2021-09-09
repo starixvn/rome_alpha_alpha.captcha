@@ -2,7 +2,6 @@
 {
     using System;
     using System.Web.Mvc;
-    using Alpha.Captcha.Models;
     using Alpha.Captcha.Resources;
     using Alpha.Captcha.Services;
 
@@ -10,9 +9,16 @@
     public class CaptchaValidationAttribute : ActionFilterAttribute
     {
         private readonly ISessionService sessionService;
+        private readonly bool forceRemove;
 
         public CaptchaValidationAttribute()
+            : this(false)
         {
+        }
+
+        public CaptchaValidationAttribute(bool forceRemove)
+        {
+            this.forceRemove = forceRemove;
             sessionService = DependencyResolver.Current.GetService(typeof(ISessionService)) as ISessionService ?? new SessionService();
         }
 
@@ -21,32 +27,41 @@
             var inputCaptcha = filterContext.HttpContext.Request.Form[Configuration.CaptchaInputName];
             if (string.IsNullOrEmpty(inputCaptcha))
             {
-                CaptchaValidationFailed(filterContext);
+                CaptchaValidationFailed(filterContext, 1, Lang.CaptchaIsEmptyErrorMessage);
                 return;
             }
 
-            var captchaSession = sessionService.Take();
-            if (captchaSession != null && inputCaptcha.Equals(captchaSession.Text, StringComparison.InvariantCultureIgnoreCase))
+            var captchaModel = sessionService.Get();
+            if (captchaModel == null)
             {
-                CaptchaValidationPassed(filterContext, captchaSession);
+                CaptchaValidationFailed(filterContext, 2, Lang.CaptchaIsNullErrorMessage);
+                return;
             }
-            else
+
+            if (!inputCaptcha.Equals(captchaModel.Text, StringComparison.OrdinalIgnoreCase))
             {
-                CaptchaValidationFailed(filterContext);
+                CaptchaValidationFailed(filterContext, 3, string.Format(Lang.ValidateErrorMessage, inputCaptcha.ToUpperInvariant(), captchaModel.Text));
+                return;
             }
 
             base.OnActionExecuting(filterContext);
         }
 
-        private void CaptchaValidationFailed(ActionExecutingContext filterContext)
+        private void CaptchaValidationFailed(ActionExecutingContext filterContext, int errorCode, string message)
         {
             var modelState = filterContext.Controller.ViewData.ModelState;
-            modelState.AddModelError(Configuration.CaptchaInputName, Lang.ValidateErrorMessage);
+            modelState.AddModelError($"{Configuration.CaptchaInputName}_{errorCode}", message);
         }
 
-        private void CaptchaValidationPassed(ActionExecutingContext filterContext, CaptchaSession captchaSession)
+        public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            // Method intentionally left empty.
+            var modelState = filterContext.Controller.ViewData.ModelState;
+            if (forceRemove || modelState.IsValid)
+            {
+                sessionService.Remove();
+            }
+
+            base.OnResultExecuted(filterContext);
         }
     }
 }

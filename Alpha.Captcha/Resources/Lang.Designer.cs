@@ -70,6 +70,24 @@ namespace Alpha.Captcha.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You haven&apos;t inputted the Captcha.
+        /// </summary>
+        internal static string CaptchaIsEmptyErrorMessage {
+            get {
+                return ResourceManager.GetString("CaptchaIsEmptyErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System cannot validate the Catpcha due to an unexpected error.
+        /// </summary>
+        internal static string CaptchaIsNullErrorMessage {
+            get {
+                return ResourceManager.GetString("CaptchaIsNullErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I&apos;m not a robot.
         /// </summary>
         internal static string IamNotARobot {
@@ -88,7 +106,7 @@ namespace Alpha.Captcha.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You input an invalid code.
+        ///   Looks up a localized string similar to You input an invalid code &quot;{0}&quot; (comparing with &quot;{1}&quot;).
         /// </summary>
         internal static string ValidateErrorMessage {
             get {
